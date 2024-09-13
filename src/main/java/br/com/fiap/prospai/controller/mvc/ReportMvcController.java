@@ -53,8 +53,8 @@ public class ReportMvcController {
     }
 
     @PostMapping("/salvar")
-    public String salvarReport(@ModelAttribute ReportRequestDTO reportRequestDTO, @RequestParam Long clienteId) {
-        reportService.createReport(reportRequestDTO, clienteId);
+    public String salvarReport(@ModelAttribute ReportRequestDTO reportRequestDTO) {
+        reportService.createReport(reportRequestDTO, reportRequestDTO.getClienteId());
         return "redirect:/reports";
     }
 
@@ -62,7 +62,16 @@ public class ReportMvcController {
     public String editarReportForm(@PathVariable Long id, Model model) {
         Optional<ReportResponseDTO> reportOpt = reportService.getReportById(id);
         if (reportOpt.isPresent()) {
-            model.addAttribute("report", reportOpt.get());
+            ReportResponseDTO reportResponseDTO = reportOpt.get();
+            ReportRequestDTO reportRequestDTO = new ReportRequestDTO();  // Converter para DTO de request
+            reportRequestDTO.setId(reportResponseDTO.getId());
+            reportRequestDTO.setTitulo(reportResponseDTO.getTitulo());
+            reportRequestDTO.setDescricao(reportResponseDTO.getDescricao());
+            reportRequestDTO.setPeriodoInicial(reportResponseDTO.getPeriodoInicial());
+            reportRequestDTO.setPeriodoFinal(reportResponseDTO.getPeriodoFinal());
+            reportRequestDTO.setClienteId(reportResponseDTO.getCliente().getId());
+
+            model.addAttribute("report", reportRequestDTO);
             List<ClienteResponseDTO> clientes = clienteService.getAllClientes();
             model.addAttribute("clientes", clientes);
             return "reports/report-form";

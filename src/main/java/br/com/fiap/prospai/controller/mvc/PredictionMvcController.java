@@ -70,7 +70,16 @@ public class PredictionMvcController {
     public String editarPredicaoForm(@PathVariable Long id, Model model) {
         Optional<PredictionResponseDTO> predictionOpt = predictionService.getPredictionById(id);
         if (predictionOpt.isPresent()) {
-            model.addAttribute("prediction", predictionOpt.get());
+            PredictionResponseDTO predictionResponse = predictionOpt.get();
+            // Converta PredictionResponseDTO para PredictionRequestDTO
+            PredictionRequestDTO predictionRequest = new PredictionRequestDTO();
+            predictionRequest.setId(predictionResponse.getId());
+            predictionRequest.setTitulo(predictionResponse.getTitulo());
+            predictionRequest.setDescricao(predictionResponse.getDescricao());
+            predictionRequest.setPrecisao(predictionResponse.getPrecisao());
+            predictionRequest.setClienteId(predictionResponse.getCliente().getId()); // Assumindo que PredictionResponseDTO tem um cliente com id
+
+            model.addAttribute("prediction", predictionRequest);
             List<ClienteResponseDTO> clientes = clienteService.getAllClientes();
             model.addAttribute("clientes", clientes);
             return "predictions/prediction-form";

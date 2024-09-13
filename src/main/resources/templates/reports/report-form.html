@@ -16,7 +16,8 @@
 <!-- Conteúdo principal -->
 <div class="content">
   <h1 th:text="${#strings.isEmpty(report.id) ? 'Novo Relatório' : 'Editar Relatório'}"></h1>
-  <form th:action="@{/reports/salvar}" th:object="${report}" method="post" class="form">
+  <form th:action="@{${#strings.isEmpty(report.id) ? '/reports/salvar' : '/reports/atualizar/' + report.id}}"
+        th:object="${report}" method="post" class="form">
     <input type="hidden" th:field="*{id}"/>
 
     <!-- Campo para Título -->

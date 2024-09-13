@@ -29,11 +29,11 @@
             <td th:text="${prediction.id}"></td>
             <td th:text="${prediction.titulo}"></td>
             <td th:text="${prediction.descricao}"></td>
-            <td th:text="${prediction.precisao}"></td>
+            <td th:text="${prediction.precisao} + '%'"></td>
             <td>
                 <a th:href="@{/predictions/{id}(id=${prediction.id})}" class="btn btn-outline-primary">Visualizar</a>
                 <a th:href="@{/predictions/editar/{id}(id=${prediction.id})}" class="btn btn-outline-secondary">Editar</a>
-                <a th:href="@{/predictions/deletar/{id}(id=${prediction.id})}" onclick="return confirm('Tem certeza que deseja deletar esta predição?');" class="btn btn-outline-danger">Deletar</a>
+                <a th:href="@{/predictions/deletar/{id}(id=${prediction.id})}" class="btn btn-outline-danger" onclick="return confirm('Tem certeza que deseja deletar esta predição?');">Deletar</a>
             </td>
         </tr>
         </tbody>

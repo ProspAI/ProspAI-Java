@@ -1,6 +1,7 @@
 package br.com.fiap.prospai.controller.mvc;
 
 import br.com.fiap.prospai.dto.request.UsuarioRequestDTO;
+import br.com.fiap.prospai.dto.response.UsuarioResponseDTO;
 import br.com.fiap.prospai.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,7 +39,11 @@ public class UsuarioMvcController {
 
     @PostMapping("/salvar")
     public String salvarUsuario(@ModelAttribute UsuarioRequestDTO usuarioRequestDTO) {
-        usuarioService.createUsuario(usuarioRequestDTO);
+        if (usuarioRequestDTO.getId() != null) {
+            usuarioService.updateUsuario(usuarioRequestDTO.getId(), usuarioRequestDTO);
+        } else {
+            usuarioService.createUsuario(usuarioRequestDTO);
+        }
         return "redirect:/usuarios";
     }
 
@@ -46,7 +51,13 @@ public class UsuarioMvcController {
     public String editarUsuarioForm(@PathVariable Long id, Model model) {
         return usuarioService.getUsuarioById(id)
                 .map(usuario -> {
-                    model.addAttribute("usuario", usuario);
+                    UsuarioRequestDTO usuarioRequestDTO = new UsuarioRequestDTO();
+                    usuarioRequestDTO.setId(usuario.getId());
+                    usuarioRequestDTO.setNome(usuario.getNome());
+                    usuarioRequestDTO.setEmail(usuario.getEmail());
+                    usuarioRequestDTO.setPapel(usuario.getPapel());
+                    usuarioRequestDTO.setAtivo(usuario.isAtivo());
+                    model.addAttribute("usuario", usuarioRequestDTO);
                     return "usuarios/usuario-form";
                 })
                 .orElse("redirect:/usuarios");

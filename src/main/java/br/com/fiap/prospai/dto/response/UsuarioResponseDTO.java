@@ -13,4 +13,6 @@ public class UsuarioResponseDTO extends RepresentationModel<UsuarioResponseDTO> 
     private String email;
     private String papel;
     private boolean ativo;
+
+
 }

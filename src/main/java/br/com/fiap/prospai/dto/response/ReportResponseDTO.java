@@ -17,5 +17,5 @@ public class ReportResponseDTO extends RepresentationModel<ReportResponseDTO> {
     private LocalDate periodoInicial;
     private LocalDate periodoFinal;
     private LocalDateTime dataCriacao;
-    private ClienteResponseDTO cliente; // Representação de resposta para o cliente associado
+    private ClienteResponseDTO cliente;
 }
