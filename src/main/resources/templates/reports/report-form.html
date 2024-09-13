@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${#strings.isEmpty(report.id) ? 'Novo Relatório - ProspAI' : 'Editar Relatório - ProspAI'}"></title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+</head>
+<body>
+
+<!-- Inclui o fragmento do Header -->
+<div th:insert="fragments/header :: header"></div>
+
+<!-- Conteúdo principal -->
+<div class="content">
+  <h1 th:text="${#strings.isEmpty(report.id) ? 'Novo Relatório' : 'Editar Relatório'}"></h1>
+  <form th:action="@{/reports/salvar}" th:object="${report}" method="post" class="form">
+    <input type="hidden" th:field="*{id}"/>
+
+    <!-- Campo para Título -->
+    <div class="form-group">
+      <label for="titulo">Título</label>
+      <input type="text" th:field="*{titulo}" id="titulo" class="form-control" required/>
+      <div th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}" class="error-message"></div>
+    </div>
+
+    <!-- Campo para Descrição -->
+    <div class="form-group">
+      <label for="descricao">Descrição</label>
+      <textarea th:field="*{descricao}" id="descricao" class="form-control" required></textarea>
+      <div th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}" class="error-message"></div>
+    </div>
+
+    <!-- Campo para Período Inicial -->
+    <div class="form-group">
+      <label for="periodoInicial">Período Inicial</label>
+      <input type="date" th:field="*{periodoInicial}" id="periodoInicial" class="form-control" required/>
+      <div th:if="${#fields.hasErrors('periodoInicial')}" th:errors="*{periodoInicial}" class="error-message"></div>
+    </div>
+
+    <!-- Campo para Período Final -->
+    <div class="form-group">
+      <label for="periodoFinal">Período Final</label>
+      <input type="date" th:field="*{periodoFinal}" id="periodoFinal" class="form-control" required/>
+      <div th:if="${#fields.hasErrors('periodoFinal')}" th:errors="*{periodoFinal}" class="error-message"></div>
+    </div>
+
+    <!-- Campo para Cliente (Dropdown) -->
+    <div class="form-group">
+      <label for="clienteId">Cliente</label>
+      <div class="form-inline-group">
+        <select th:field="*{clienteId}" id="clienteId" class="form-control">
+          <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
+        </select>
+        <!-- Botão para criar um novo cliente -->
+        <a th:href="@{/clientes/novo}" class="btn btn-outline-secondary">Novo Cliente</a>
+      </div>
+      <div th:if="${#fields.hasErrors('clienteId')}" th:errors="*{clienteId}" class="error-message"></div>
+    </div>
+
+    <!-- Botões de Ação -->
+    <div class="button-group">
+      <button type="submit" class="btn btn-primary">Salvar</button>
+      <a th:href="@{/reports}" class="btn btn-outline-danger">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+<!-- Inclui o fragmento do Footer -->
+<div th:insert="fragments/footer :: footer"></div>
+
+</body>
+</html>

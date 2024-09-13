@@ -1,0 +1,320 @@
+/* /static/css/styles.css */
+body {
+    font-family: 'Nunito Sans', sans-serif;
+    background-color: #f7f9fc;
+    color: #2c3e50;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden; /* Evita rolagem horizontal */
+}
+
+/* Header */
+.header {
+    background-color: #1f2d3d;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: fixed; /* Fixado no topo */
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    transition: background-color 0.3s ease;
+}
+
+.header nav {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap; /* Permite quebra de linha */
+}
+
+.header .nav-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.header .nav-link:hover,
+.header .nav-link.active {
+    background-color: #2c3e50; /* Cor de fundo ao passar o mouse e item ativo */
+    color: #ffffff;
+    transform: translateY(-2px); /* Efeito de hover */
+    font-weight: 700; /* Mais negrito para destaque */
+}
+
+/* Content */
+.content {
+    max-width: 900px; /* Ajuste de largura para formularios */
+    margin: 120px auto 40px; /* Espaço para o header fixo */
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    flex: 1;
+    animation: fadeIn 0.5s ease-in-out; /* Animação ao aparecer */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h1 {
+    color: #2c3e50;
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    letter-spacing: 0.5px;
+    text-align: center;
+    animation: slideDown 0.6s ease-out; /* Animação de slide down */
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+}
+
+thead {
+    background-color: #2c3e50;
+    color: #ffffff;
+}
+
+th, td {
+    padding: 13px;
+    text-align: left;
+    font-weight: 400;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+th {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+    background-color: #f1f4f9;
+}
+
+tbody td {
+    color: #34495e;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    font-weight: 600;
+    text-align: center;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-right: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra leve */
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #ffffff;
+    border: 1px solid #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px); /* Efeito de hover */
+}
+
+.btn-outline-primary {
+    background-color: transparent;
+    color: #007bff;
+    border: 1px solid #007bff;
+}
+
+.btn-outline-primary:hover {
+    background-color: #007bff;
+    color: #ffffff;
+    transform: translateY(-2px); /* Efeito de hover */
+}
+
+.btn-outline-secondary {
+    background-color: transparent;
+    color: #6c757d;
+    border: 1px solid #6c757d;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: #ffffff;
+    transform: translateY(-2px); /* Efeito de hover */
+}
+
+.btn-outline-danger {
+    background-color: transparent;
+    color: #dc3545;
+    border: 1px solid #dc3545;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: #ffffff;
+    transform: translateY(-2px); /* Efeito de hover */
+}
+
+/* Footer */
+footer {
+    background-color: #1f2d3d;
+    color: #ffffff;
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+    margin-top: auto;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Form Styles */
+.details-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    margin-bottom: 24px;
+}
+
+.details-list dt {
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.details-list dd {
+    margin-bottom: 16px;
+    font-weight: 400;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.error-message {
+    color: #e74c3c;
+    font-size: 14px;
+}
+
+.button-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.form-inline-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-control {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d1d6;
+    background-color: #ffffff;
+    font-size: 16px;
+    color: #2c3e50;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #2c3e50;
+}
+
+/* Avaliação por Estrelas */
+.star-rating {
+    display: flex;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.star {
+    font-size: 24px;
+    color: #d1d1d6;
+    transition: color 0.3s ease;
+}
+
+/* Media Queries */
+@media (max-width: 1200px) {
+    .content {
+        padding: 20px;
+    }
+
+    .header nav {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header nav {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .content {
+        margin: 120px 20px 20px;
+        padding: 15px;
+    }
+
+    table, th, td {
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .content {
+        margin: 100px 10px 10px;
+        padding: 15px;
+    }
+
+    table, th, td {
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 10px;
+    }
+
+    .btn, .btn-primary, .btn-outline-primary, .btn-outline-secondary, .btn-outline-danger {
+        padding: 6px 12px;
+        margin-right: 5px;
+    }
+}

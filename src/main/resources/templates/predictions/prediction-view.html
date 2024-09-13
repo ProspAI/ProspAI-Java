@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes da Predição - ProspAI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<!-- Inclui o fragmento do Header -->
+<div th:insert="fragments/header :: header"></div>
+
+<!-- Conteúdo principal -->
+<div class="content">
+    <h1>Detalhes da Predição</h1>
+    <dl class="details-list">
+        <dt>ID</dt>
+        <dd th:text="${prediction.id}"></dd>
+
+        <dt>Título</dt>
+        <dd th:text="${prediction.titulo}"></dd>
+
+        <dt>Descrição</dt>
+        <dd th:text="${prediction.descricao}"></dd>
+
+        <dt>Precisão</dt>
+        <dd th:text="${prediction.precisao} + '%'"></dd>
+
+        <dt>Cliente</dt>
+        <dd th:text="${prediction.cliente.nome}"></dd>
+    </dl>
+    <div class="button-group">
+        <a th:href="@{/predictions}" class="btn btn-outline-secondary">Voltar</a>
+        <a th:href="@{/predictions/editar/{id}(id=${prediction.id})}" class="btn btn-outline-primary">Editar</a>
+        <a th:href="@{/predictions/deletar/{id}(id=${prediction.id})}" onclick="return confirm('Tem certeza que deseja deletar esta predição?');" class="btn btn-outline-danger">Deletar</a>
+    </div>
+</div>
+
+<!-- Inclui o fragmento do Footer -->
+<div th:insert="fragments/footer :: footer"></div>
+
+</body>
+</html>

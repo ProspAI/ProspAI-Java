@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes do Feedback - ProspAI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<!-- Inclui o fragmento do Header -->
+<div th:insert="fragments/header :: header"></div>
+
+<!-- Conteúdo principal -->
+<div class="content">
+    <h1>Detalhes do Feedback</h1>
+    <dl class="details-list">
+        <dt>ID</dt>
+        <dd th:text="${feedback.id}"></dd>
+
+        <dt>Título</dt>
+        <dd th:text="${feedback.titulo}"></dd>
+
+        <dt>Descrição</dt>
+        <dd th:text="${feedback.descricao}"></dd>
+
+        <dt>Nota</dt>
+        <dd th:text="${feedback.nota}"></dd>
+
+        <dt>Cliente</dt>
+        <dd th:text="${feedback.cliente.nome}"></dd>
+    </dl>
+    <div class="button-group">
+        <a th:href="@{/feedbacks}" class="btn btn-outline-secondary">Voltar</a>
+        <a th:href="@{/feedbacks/editar/{id}(id=${feedback.id})}" class="btn btn-outline-primary">Editar</a>
+        <a th:href="@{/feedbacks/deletar/{id}(id=${feedback.id})}" onclick="return confirm('Tem certeza que deseja deletar este feedback?');" class="btn btn-outline-danger">Deletar</a>
+    </div>
+</div>
+
+<!-- Inclui o fragmento do Footer -->
+<div th:insert="fragments/footer :: footer"></div>
+
+</body>
+</html>

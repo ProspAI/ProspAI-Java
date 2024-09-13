@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${#strings.isEmpty(feedback.id) ? 'Novo Feedback - ProspAI' : 'Editar Feedback - ProspAI'}"></title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+</head>
+<body>
+
+<!-- Inclui o fragmento do Header -->
+<div th:insert="fragments/header :: header"></div>
+
+<!-- Conteúdo principal -->
+<div class="content">
+    <h1 th:text="${#strings.isEmpty(feedback.id) ? 'Novo Feedback' : 'Editar Feedback'}"></h1>
+    <form th:action="@{/feedbacks/salvar}" th:object="${feedback}" method="post" class="form">
+        <input type="hidden" th:field="*{id}"/>
+
+        <!-- Campo para Título -->
+        <div class="form-group">
+            <label for="titulo">Título</label>
+            <input type="text" th:field="*{titulo}" id="titulo" class="form-control" required/>
+            <div th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}" class="error-message"></div>
+        </div>
+
+        <!-- Campo para Descrição -->
+        <div class="form-group">
+            <label for="descricao">Descrição</label>
+            <textarea th:field="*{descricao}" id="descricao" class="form-control" required></textarea>
+            <div th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}" class="error-message"></div>
+        </div>
+
+        <!-- Campo para Avaliação por Estrelas -->
+        <div class="form-group">
+            <label for="rating">Avaliação</label>
+            <div id="star-rating" class="star-rating">
+                <span class="star" data-value="1">&#9733;</span>
+                <span class="star" data-value="2">&#9733;</span>
+                <span class="star" data-value="3">&#9733;</span>
+                <span class="star" data-value="4">&#9733;</span>
+                <span class="star" data-value="5">&#9733;</span>
+            </div>
+            <input type="hidden" th:field="*{nota}" id="nota" />
+            <div th:if="${#fields.hasErrors('nota')}" th:errors="*{nota}" class="error-message"></div>
+        </div>
+
+        <!-- Campo para Cliente (Dropdown) -->
+        <div class="form-group">
+            <label for="clienteId">Cliente</label>
+            <div class="form-inline-group">
+                <select th:field="*{clienteId}" id="clienteId" class="form-control">
+                    <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
+                </select>
+                <!-- Botão para criar um novo cliente -->
+                <a th:href="@{/clientes/novo}" class="btn btn-outline-secondary">Novo Cliente</a>
+            </div>
+            <div th:if="${#fields.hasErrors('clienteId')}" th:errors="*{clienteId}" class="error-message"></div>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="button-group">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <a th:href="@{/feedbacks}" class="btn btn-outline-danger">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<!-- Inclui o fragmento do Footer -->
+<div th:insert="fragments/footer :: footer"></div>
+
+<!-- Script para manipular a avaliação por estrelas -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const stars = document.querySelectorAll('#star-rating .star');
+        const notaInput = document.getElementById('nota');
+
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                const ratingValue = this.getAttribute('data-value');
+                notaInput.value = ratingValue;
+
+                stars.forEach(s => s.style.color = '#d1d1d6'); // Reseta a cor das estrelas
+                for (let i = 0; i < ratingValue; i++) {
+                    stars[i].style.color = '#f39c12'; // Colore as estrelas selecionadas
+                }
+            });
+
+            star.addEventListener('mouseover', function() {
+                const hoverValue = this.getAttribute('data-value');
+                stars.forEach(s => s.style.color = '#d1d1d6'); // Reseta a cor das estrelas
+                for (let i = 0; i < hoverValue; i++) {
+                    stars[i].style.color = '#f39c12'; // Colore as estrelas durante o hover
+                }
+            });
+
+            star.addEventListener('mouseout', function() {
+                const currentValue = notaInput.value;
+                stars.forEach(s => s.style.color = '#d1d1d6'); // Reseta a cor das estrelas
+                for (let i = 0; i < currentValue; i++) {
+                    stars[i].style.color = '#f39c12'; // Colore as estrelas selecionadas após o hover
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
