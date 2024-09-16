@@ -1,4 +1,4 @@
-### README.md
+
 
 # ProspAI
 
@@ -8,20 +8,20 @@ A aplicação já está hospedada na nuvem e pode ser acessada através do link 
 
 ## Índice
 
-- [Visão Geral do Projeto](#visão-geral-do-projeto)
-- [Arquitetura](#arquitetura)
-- [Recursos Principais](#recursos-principais)
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Padrões de Projeto Implementados](#padrões-de-projeto-implementados)
-- [Endpoints da API](#endpoints-da-api)
-- [Funcionalidades da Interface MVC](#funcionalidades-da-interface-mvc)
-- [Instalação e Configuração](#instalação-e-configuração)
-- [Como Contribuir](#como-contribuir)
-- [Licença](#licença)
+1. [Visão Geral do Projeto](#visão-geral-do-projeto)
+2. [Arquitetura](#arquitetura)
+3. [Recursos Principais](#recursos-principais)
+4. [Tecnologias Utilizadas](#tecnologias-utilizadas)
+5. [Padrões de Projeto Implementados](#padrões-de-projeto-implementados)
+6. [Endpoints da API](#endpoints-da-api)
+7. [Funcionalidades da Interface MVC](#funcionalidades-da-interface-mvc)
+8. [Instalação e Configuração](#instalação-e-configuração)
+9. [Como Contribuir](#como-contribuir)
+10. [Licença](#licença)
 
 ## Visão Geral do Projeto
 
-ProspAI é uma plataforma que combina inteligência artificial e análise de dados para melhorar a tomada de decisão em vendas. Através da integração com fontes de dados externas, como Reclame Aqui e Procon, a aplicação consegue analisar feedbacks de clientes e oferecer predições e relatórios detalhados para otimização de estratégias de vendas.
+**ProspAI** é uma plataforma que combina inteligência artificial e análise de dados para melhorar a tomada de decisão em vendas. Através da integração com fontes de dados externas, como Reclame Aqui e Procon, a aplicação consegue analisar feedbacks de clientes e oferecer predições e relatórios detalhados para otimização de estratégias de vendas.
 
 ## Arquitetura
 
@@ -44,13 +44,13 @@ A aplicação utiliza HATEOAS (Hypermedia as the Engine of Application State) pa
 
 ## Tecnologias Utilizadas
 
-- **Java 17**
-- **Spring Boot**
-- **Spring Data JPA** com integração ao **SQL Server**
-- **Thymeleaf** para a camada de visualização (MVC)
-- **HATEOAS** para hiperlinks de recursos na API REST
-- **OpenAPI/Swagger** para documentação da API
-- **JavaScript** e **Bootstrap** para interatividade e design responsivo
+- Java 17
+- Spring Boot
+- Spring Data JPA com integração ao SQL Server
+- Thymeleaf para a camada de visualização (MVC)
+- HATEOAS para hiperlinks de recursos na API REST
+- OpenAPI/Swagger para documentação da API
+- JavaScript e Bootstrap para interatividade e design responsivo
 
 ## Padrões de Projeto Implementados
 
@@ -62,53 +62,53 @@ A aplicação utiliza HATEOAS (Hypermedia as the Engine of Application State) pa
 
 Abaixo está a lista de principais endpoints da API RESTful disponíveis:
 
-### Clientes (`/api/clientes`)
-
+### Clientes (/api/clientes)
 - `GET /api/clientes` - Retorna todos os clientes.
 - `GET /api/clientes/{id}` - Retorna um cliente específico por ID.
 - `POST /api/clientes` - Cria um novo cliente.
 - `PUT /api/clientes/{id}` - Atualiza um cliente existente.
 - `DELETE /api/clientes/{id}` - Deleta um cliente.
 
-### Feedbacks (`/api/feedbacks`)
-
+### Feedbacks (/api/feedbacks)
 - `GET /api/feedbacks` - Retorna todos os feedbacks.
 - `GET /api/feedbacks/{id}` - Retorna um feedback específico por ID.
 - `POST /api/feedbacks/cliente/{clienteId}` - Cria um feedback para um cliente específico.
 - `PUT /api/feedbacks/{id}` - Atualiza um feedback existente.
 - `DELETE /api/feedbacks/{id}` - Deleta um feedback.
 
-### Predições (`/api/predictions`)
-
+### Predições (/api/predictions)
 - `GET /api/predictions` - Retorna todas as predições.
 - `GET /api/predictions/{id}` - Retorna uma predição específica por ID.
 - `POST /api/predictions/cliente/{clienteId}` - Cria uma predição para um cliente específico.
 - `PUT /api/predictions/{id}` - Atualiza uma predição existente.
 - `DELETE /api/predictions/{id}` - Deleta uma predição.
 
-### Relatórios (`/api/reports`)
-
+### Relatórios (/api/reports)
 - `GET /api/reports` - Retorna todos os relatórios.
 - `GET /api/reports/{id}` - Retorna um relatório específico por ID.
 - `POST /api/reports` - Cria um novo relatório.
 - `PUT /api/reports/{id}` - Atualiza um relatório existente.
 - `DELETE /api/reports/{id}` - Deleta um relatório.
 
-### Estratégias de Vendas (`/api/sales-strategies`)
-
+### Estratégias de Vendas (/api/sales-strategies)
 - `GET /api/sales-strategies` - Retorna todas as estratégias de vendas.
 - `GET /api/sales-strategies/{id}` - Retorna uma estratégia de vendas específica por ID.
 - `POST /api/sales-strategies` - Cria uma nova estratégia de vendas.
 - `PUT /api/sales-strategies/{id}` - Atualiza uma estratégia de vendas existente.
 - `DELETE /api/sales-strategies/{id}` - Deleta uma estratégia de vendas.
 
-### Usuários (`/api/usuarios`)
-
+### Usuários (/api/usuarios)
 - `GET /api/usuarios` - Retorna todos os usuários.
 - `GET /api/usuarios/{id}` - Retorna um usuário específico por ID.
 - `POST /api/usuarios` - Cria um novo usuário.
 - `PUT /api/usuarios/{id}` - Atualiza um usuário existente.
 - `DELETE /api/usuarios/{id}` - Deleta um usuário.
+
+### Documentação Swagger
+Para testar e visualizar a documentação dos endpoints da API, acesse:
+
+- **Ambiente Local:** [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+- **Ambiente na Nuvem (Azure):** [https://prospai.azurewebsites.net/swagger-ui.html](https://prospai.azurewebsites.net/swagger-ui.html)
 
 ## Funcionalidades da Interface MVC
 
@@ -130,7 +130,7 @@ A interface MVC oferece funcionalidades interativas para a gestão de todas as e
    ```
 
 2. **Configure o Banco de Dados:**
-   - A aplicação utiliza **SQL Server**. Atualize as configurações do banco de dados no arquivo `application.properties` conforme necessário.
+   - A aplicação utiliza SQL Server. Atualize as configurações do banco de dados no arquivo `application.properties` conforme necessário.
 
 3. **Execute a Aplicação:**
    - Utilize o Maven ou qualquer IDE Java para compilar e executar o projeto:
@@ -160,7 +160,7 @@ A interface MVC oferece funcionalidades interativas para a gestão de todas as e
 
 ## Licença
 
-Este projeto é licenciado sob os termos da [MIT License](LICENSE).
+Este projeto é licenciado sob os termos da MIT License.
 
 ---
 
