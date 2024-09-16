@@ -164,4 +164,16 @@ Este projeto é licenciado sob os termos da MIT License.
 
 ---
 
+## Autores
+
+Este projeto foi desenvolvido por:
+
+- **AGATHA PIRES** – RM552247 – (2TDSPH)
+- **DAVID BRYAN VIANA** – RM551236 – (2TDSPM)
+- **GABRIEL LIMA** – RM99743 – (2TDSPM)
+- **GIOVANNA ALVAREZ** – RM98892 – (2TDSPM)
+- **MURILO MATOS** – RM552525 – (2TDSPM)
+
+---
+
 Sinta-se à vontade para contribuir com melhorias e novas funcionalidades para o ProspAI!
