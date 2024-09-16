@@ -44,7 +44,7 @@ A aplicação utiliza HATEOAS (Hypermedia as the Engine of Application State) pa
 
 ## Tecnologias Utilizadas
 
-- Java 17
+- Java 21
 - Spring Boot
 - Spring Data JPA com integração ao SQL Server
 - Thymeleaf para a camada de visualização (MVC)
