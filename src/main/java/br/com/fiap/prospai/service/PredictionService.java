@@ -7,7 +7,11 @@ import br.com.fiap.prospai.entity.Prediction;
 import br.com.fiap.prospai.entity.Cliente;
 import br.com.fiap.prospai.repository.PredictionRepository;
 import br.com.fiap.prospai.repository.ClienteRepository;
+import io.spring.ai.openai.chat.OpenAiChatModel;
+import io.spring.ai.openai.chat.ChatResponse;
+import io.spring.ai.openai.chat.Prompt;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,10 +24,18 @@ public class PredictionService {
 
     private final PredictionRepository predictionRepository;
     private final ClienteRepository clienteRepository;
+    private final OpenAiChatModel chatModel;  // Adicionando o modelo de chat para OpenAI
+    private final EmailService emailService;  // Adicionando o serviço de email para enviar campanhas
 
-    public PredictionService(PredictionRepository predictionRepository, ClienteRepository clienteRepository) {
+    @Autowired
+    public PredictionService(PredictionRepository predictionRepository,
+                             ClienteRepository clienteRepository,
+                             OpenAiChatModel chatModel,
+                             EmailService emailService) {
         this.predictionRepository = predictionRepository;
         this.clienteRepository = clienteRepository;
+        this.chatModel = chatModel;
+        this.emailService = emailService;
     }
 
     public List<PredictionResponseDTO> getAllPredictions() {
@@ -47,46 +59,60 @@ public class PredictionService {
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado com id: " + clienteId));
 
-        // Cria uma nova entidade Prediction e copia as propriedades do DTO
+        // 1. Gere a predição e conteúdo de marketing personalizado usando OpenAI GPT
+        String promptPrediction = String.format(
+                "Baseado nos seguintes dados do cliente:\n" +
+                        "Nome: %s\n" +
+                        "Segmento de Mercado: %s\n" +
+                        "Score de Engajamento: %s\n" +
+                        "Descrição: %s\n" +
+                        "Crie uma campanha de marketing personalizada que inclua um título e conteúdo para um email.",
+                cliente.getNome(), cliente.getSegmentoMercado(), cliente.getScoreEngajamento(), predictionRequestDTO.getDescricao()
+        );
+
+        ChatResponse chatResponse = chatModel.call(new Prompt(promptPrediction));
+        String generatedContent = chatResponse.getResult().getOutput().getContent();
+
+        // 2. Salve a predição no banco de dados
         Prediction prediction = new Prediction();
         BeanUtils.copyProperties(predictionRequestDTO, prediction);
+        prediction.setDescricao(generatedContent); // Atualize a descrição com o conteúdo gerado
         prediction.setDataGeracao(LocalDateTime.now());
         prediction.setCliente(cliente);  // Associa o cliente à predição
 
         // Salva a nova predição no repositório
         Prediction novaPrediction = predictionRepository.save(prediction);
+
+        // 3. Envie a campanha de marketing gerada por email
+        emailService.sendMarketingEmail(cliente.getEmail(), generatedContent);
+
         return toResponseDTO(novaPrediction);
     }
 
     public PredictionResponseDTO updatePrediction(Long id, PredictionRequestDTO predictionRequestDTO) {
-        // Verifica se a predição existe no banco de dados
         Prediction prediction = predictionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Prediction não encontrada com id: " + id));
 
-        // Copia as propriedades do DTO para a entidade Prediction existente, excluindo certos campos
         BeanUtils.copyProperties(predictionRequestDTO, prediction, "id", "dataGeracao", "cliente");
 
-        // Verifica se o cliente associado à predição existe
         Cliente cliente = clienteRepository.findById(predictionRequestDTO.getClienteId())
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado com id: " + predictionRequestDTO.getClienteId()));
-        prediction.setCliente(cliente);  // Atualiza o cliente da predição
+        prediction.setCliente(cliente);
 
-        // Salva a predição atualizada no repositório
         Prediction predictionAtualizada = predictionRepository.save(prediction);
         return toResponseDTO(predictionAtualizada);
     }
 
     public void deletePrediction(Long id) {
-        // Verifica se a predição existe no banco de dados
         Prediction prediction = predictionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Prediction não encontrada com id: " + id));
-        predictionRepository.delete(prediction);  // Exclui a predição
+        predictionRepository.delete(prediction);
     }
 
     private PredictionResponseDTO toResponseDTO(Prediction prediction) {
         PredictionResponseDTO responseDTO = new PredictionResponseDTO();
         BeanUtils.copyProperties(prediction, responseDTO);
-        responseDTO.setCliente(new ClienteResponseDTO(prediction.getCliente()));  // Converte o cliente para DTO
+        responseDTO.setCliente(new ClienteResponseDTO(prediction.getCliente()));
         return responseDTO;
     }
 }

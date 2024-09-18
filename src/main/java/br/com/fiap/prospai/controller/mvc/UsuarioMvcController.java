@@ -1,3 +1,4 @@
+// UsuarioMvcController.java
 package br.com.fiap.prospai.controller.mvc;
 
 import br.com.fiap.prospai.dto.request.UsuarioRequestDTO;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 
 @Controller
 @RequestMapping("/usuarios")
@@ -44,7 +46,7 @@ public class UsuarioMvcController {
         } else {
             usuarioService.createUsuario(usuarioRequestDTO);
         }
-        return "redirect:/usuarios";
+        return "redirect:/login";
     }
 
     @GetMapping("/editar/{id}")

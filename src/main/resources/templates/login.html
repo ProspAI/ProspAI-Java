@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{label.login}">Login</title>
+    <!-- Certifique-se de que o CSS específico do login seja carregado -->
+    <link rel="stylesheet" th:href="@{/css/login.css}" />
+</head>
+<body>
+<div class="login-container">
+    <h1 th:text="#{label.login}">Login</h1>
+    <!-- Adicione um objeto de comando (loginRequest) que deve ser adicionado pelo controlador -->
+    <form th:action="@{/login}" th:object="${loginRequest}" method="post">
+        <div class="form-group">
+            <label th:for="username" th:text="#{label.username}">Usuário:</label>
+            <input type="text" th:field="*{username}" class="form-control" placeholder="Digite seu usuário"/>
+            <div th:if="${#fields.hasErrors('username')}" class="error-message">
+                <p th:errors="*{username}">Erro</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label th:for="password" th:text="#{label.password}">Senha:</label>
+            <input type="password" th:field="*{password}" class="form-control" placeholder="Digite sua senha"/>
+            <div th:if="${#fields.hasErrors('password')}" class="error-message">
+                <p th:errors="*{password}">Erro</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" th:text="#{label.login}">Login</button>
+        </div>
+    </form>
+    <div>
+        <a th:href="@{/usuarios/novo}" class="link-register" th:text="#{label.register}">Registrar</a>
+    </div>
+</div>
+</body>
+</html>

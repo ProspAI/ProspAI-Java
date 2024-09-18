@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title th:text="${#strings.isEmpty(usuario.id) ? 'Novo Usuário - ProspAI' : 'Editar Usuário - ProspAI'}"></title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}"> <!-- Use th:href para Thymeleaf -->
 </head>
 <body>
 

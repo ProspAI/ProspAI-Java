@@ -1,15 +1,15 @@
+// Usuario.java
 package br.com.fiap.prospai.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import org.springframework.hateoas.RepresentationModel;
 
 @Entity
 @Data
 @Table(name = "USUARIOS_2")
-public class Usuario extends RepresentationModel<Usuario> {
+public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usuario_2_seq")
@@ -29,8 +29,9 @@ public class Usuario extends RepresentationModel<Usuario> {
     @Column(name = "SENHA", nullable = false)
     private String senha;
 
+    @NotBlank
     @Column(name = "PAPEL", nullable = false)
-    private String papel;
+    private String papel; // Exemplo: "ROLE_ADMIN" ou "ROLE_USER"
 
     @Column(name = "ATIVO", nullable = false)
     private boolean ativo;
