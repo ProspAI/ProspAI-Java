@@ -51,8 +51,7 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'
 
     // Integração com APIs de IA (OpenAI)
-    implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
-
+    implementation 'org.springframework.ai:spring-ai-openai'
     // Validação
     implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
 

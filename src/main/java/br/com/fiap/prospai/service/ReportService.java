@@ -7,6 +7,8 @@ import br.com.fiap.prospai.entity.Report;
 import br.com.fiap.prospai.repository.ReportRepository;
 import br.com.fiap.prospai.repository.ClienteRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,10 +21,13 @@ public class ReportService {
 
     private final ReportRepository reportRepository;
     private final ClienteRepository clienteRepository;
+    private final KafkaTemplate<String, String> kafkaTemplate; // Adicionando o KafkaTemplate
 
-    public ReportService(ReportRepository reportRepository, ClienteRepository clienteRepository) {
+    @Autowired
+    public ReportService(ReportRepository reportRepository, ClienteRepository clienteRepository, KafkaTemplate<String, String> kafkaTemplate) {
         this.reportRepository = reportRepository;
         this.clienteRepository = clienteRepository;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     public List<ReportResponseDTO> getAllReports() {
@@ -43,7 +48,12 @@ public class ReportService {
         report.setDataCriacao(LocalDateTime.now());
         report.setCliente(clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado com id: " + clienteId)));
+
         Report novoReport = reportRepository.save(report);
+
+        // Enviar mensagem ao Kafka após a criação do relatório
+        kafkaTemplate.send("report_topic", "Novo relatório criado com ID: " + novoReport.getId());
+
         return toResponseDTO(novoReport);
     }
 
@@ -53,6 +63,10 @@ public class ReportService {
 
         BeanUtils.copyProperties(reportRequestDTO, report, "id", "dataCriacao", "cliente");
         Report reportAtualizado = reportRepository.save(report);
+
+        // Enviar mensagem ao Kafka após a atualização do relatório
+        kafkaTemplate.send("report_topic", "Relatório atualizado com ID: " + reportAtualizado.getId());
+
         return toResponseDTO(reportAtualizado);
     }
 
@@ -60,6 +74,9 @@ public class ReportService {
         Report report = reportRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Report não encontrado com id: " + id));
         reportRepository.delete(report);
+
+        // Enviar mensagem ao Kafka após a exclusão do relatório
+        kafkaTemplate.send("report_topic", "Relatório deletado com ID: " + id);
     }
 
     private ReportResponseDTO toResponseDTO(Report report) {
