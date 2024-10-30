@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Monitoramento - ProspAI</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div th:insert="fragments/header :: header"></div>
+<div class="content">
+    <h1>Monitoramento do Sistema</h1>
+    <h2>Saúde da Aplicação</h2>
+    <pre th:text="${T(org.springframework.web.util.HtmlUtils).htmlEscape(health)}"></pre>
+    <h2>Métricas</h2>
+    <pre th:text="${T(org.springframework.web.util.HtmlUtils).htmlEscape(metrics)}"></pre>
+</div>
+<div th:insert="fragments/footer :: footer"></div>
+</body>
+</html>

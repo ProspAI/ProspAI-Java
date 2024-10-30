@@ -40,7 +40,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll() // Permite o acesso aos recursos estáticos
                         .requestMatchers("/login", "/usuarios/novo", "/usuarios/salvar").permitAll() // Permite acesso à página de login e cadastro
+                        .requestMatchers("/actuator/**").hasRole("ADMIN") // Permite acesso aos endpoints do Actuator
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Rotas que exigem perfil ADMIN
+                        .requestMatchers("/monitoramento/**").hasRole("ADMIN")
+                        .requestMatchers("/actuator/health", "/actuator/info").permitAll()
                         .anyRequest().authenticated() // Qualquer outra rota precisa estar autenticada
                 )
                 .formLogin(form -> form

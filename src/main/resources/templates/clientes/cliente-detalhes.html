@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Detalhes do Cliente - ProspAI</title>
+    <title th:text="#{cliente.detalhes.titulo}">Detalhes do Cliente - ProspAI</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
@@ -13,33 +13,33 @@
 
 <!-- Conteúdo principal -->
 <div class="content">
-    <h1>Detalhes do Cliente</h1>
+    <h1 th:text="#{cliente.detalhes.heading}">Detalhes do Cliente</h1>
     <dl class="details-list">
-        <dt>ID</dt>
+        <dt th:text="#{cliente.label.id}">ID</dt>
         <dd th:text="${cliente.id}"></dd>
 
-        <dt>Nome</dt>
+        <dt th:text="#{cliente.label.nome}">Nome</dt>
         <dd th:text="${cliente.nome}"></dd>
 
-        <dt>Email</dt>
+        <dt th:text="#{cliente.label.email}">Email</dt>
         <dd th:text="${cliente.email}"></dd>
 
-        <dt>Telefone</dt>
+        <dt th:text="#{cliente.label.telefone}">Telefone</dt>
         <dd th:text="${cliente.telefone}"></dd>
 
-        <dt>Segmento de Mercado</dt>
+        <dt th:text="#{cliente.label.segmentoMercado}">Segmento de Mercado</dt>
         <dd th:text="${cliente.segmentoMercado}"></dd>
 
-        <dt>Data de Criação</dt>
+        <dt th:text="#{cliente.label.dataCriacao}">Data de Criação</dt>
         <dd th:text="${#temporals.format(cliente.dataCriacao, 'dd/MM/yyyy HH:mm')}"></dd>
 
-        <dt>Score de Engajamento</dt>
+        <dt th:text="#{cliente.label.scoreEngajamento}">Score de Engajamento</dt>
         <dd th:text="${cliente.scoreEngajamento}"></dd>
     </dl>
     <div class="button-group">
-        <a th:href="@{/clientes}" class="btn btn-outline-secondary">Voltar</a>
-        <a th:href="@{/clientes/editar/{id}(id=${cliente.id})}" class="btn btn-outline-primary">Editar</a>
-        <a th:href="@{/clientes/deletar/{id}(id=${cliente.id})}" onclick="return confirm('Tem certeza que deseja deletar este cliente?');" class="btn btn-outline-danger">Deletar</a>
+        <a th:href="@{/clientes}" class="btn btn-outline-secondary" th:text="#{botao.voltar}">Voltar</a>
+        <a th:href="@{/clientes/editar/{id}(id=${cliente.id})}" class="btn btn-outline-primary" th:text="#{botao.editar}">Editar</a>
+        <a th:href="@{/clientes/deletar/{id}(id=${cliente.id})}" onclick="return confirm('#{confirmacao.deletar.cliente}');" class="btn btn-outline-danger" th:text="#{botao.deletar}">Deletar</a>
     </div>
 </div>
 

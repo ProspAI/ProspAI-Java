@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Estratégias de Vendas - ProspAI</title>
+    <title th:text="#{salesStrategy.lista.titulo}">Lista de Estratégias de Vendas - ProspAI</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
@@ -13,17 +13,17 @@
 
 <!-- Conteúdo principal -->
 <div class="content">
-    <h1>Lista de Estratégias de Vendas</h1>
+    <h1 th:text="#{salesStrategy.lista.heading}">Lista de Estratégias de Vendas</h1>
     <table class="table">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Título</th>
-            <th>Descrição</th>
-            <th>Tipo</th>
-            <th>Data de Implementação</th>
-            <th>Eficácia Prevista</th>
-            <th>Ações</th>
+            <th th:text="#{salesStrategy.label.id}">ID</th>
+            <th th:text="#{salesStrategy.label.titulo}">Título</th>
+            <th th:text="#{salesStrategy.label.descricao}">Descrição</th>
+            <th th:text="#{salesStrategy.label.tipoEstrategia}">Tipo</th>
+            <th th:text="#{salesStrategy.label.dataImplementacao}">Data de Implementação</th>
+            <th th:text="#{salesStrategy.label.eficaciaPrevista}">Eficácia Prevista</th>
+            <th th:text="#{tabela.acoes}">Ações</th>
         </tr>
         </thead>
         <tbody>
@@ -35,14 +35,14 @@
             <td th:text="${#temporals.format(salesStrategy.dataImplementacao, 'dd/MM/yyyy')}"></td>
             <td th:text="${salesStrategy.eficaciaPrevista} + '%'"></td>
             <td>
-                <a th:href="@{/sales-strategies/{id}(id=${salesStrategy.id})}" class="btn btn-outline-primary">Visualizar</a>
-                <a th:href="@{/sales-strategies/editar/{id}(id=${salesStrategy.id})}" class="btn btn-outline-secondary">Editar</a>
-                <a th:href="@{/sales-strategies/deletar/{id}(id=${salesStrategy.id})}" class="btn btn-outline-danger" onclick="return confirm('Tem certeza que deseja deletar esta estratégia?');">Deletar</a>
+                <a th:href="@{/sales-strategies/{id}(id=${salesStrategy.id})}" class="btn btn-outline-primary" th:text="#{botao.visualizar}">Visualizar</a>
+                <a th:href="@{/sales-strategies/editar/{id}(id=${salesStrategy.id})}" class="btn btn-outline-secondary" th:text="#{botao.editar}">Editar</a>
+                <a th:href="@{/sales-strategies/deletar/{id}(id=${salesStrategy.id})}" class="btn btn-outline-danger" onclick="return confirm('#{confirmacao.deletar.salesStrategy}');" th:text="#{botao.deletar}">Deletar</a>
             </td>
         </tr>
         </tbody>
     </table>
-    <a href="/sales-strategies/novo" class="btn btn-primary">Nova Estratégia de Vendas</a>
+    <a th:href="@{/sales-strategies/novo}" class="btn btn-primary" th:text="#{botao.novaSalesStrategy}">Nova Estratégia de Vendas</a>
 </div>
 
 <!-- Inclui o fragmento do Footer -->

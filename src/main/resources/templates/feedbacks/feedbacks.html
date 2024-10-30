@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Feedbacks - ProspAI</title>
+    <title th:text="#{feedback.lista.titulo}">Lista de Feedbacks - ProspAI</title>
     <!-- Importando CSS externo -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
@@ -15,15 +15,15 @@
 
 <!-- Conteúdo principal -->
 <div class="content">
-    <h1>Lista de Feedbacks</h1>
+    <h1 th:text="#{feedback.lista.heading}">Lista de Feedbacks</h1>
     <table>
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Título</th>
-            <th>Descrição</th>
-            <th>Nota</th>
-            <th>Ações</th>
+            <th th:text="#{feedback.label.id}">ID</th>
+            <th th:text="#{feedback.label.titulo}">Título</th>
+            <th th:text="#{feedback.label.descricao}">Descrição</th>
+            <th th:text="#{feedback.label.nota}">Nota</th>
+            <th th:text="#{tabela.acoes}">Ações</th>
         </tr>
         </thead>
         <tbody>
@@ -33,14 +33,14 @@
             <td th:text="${feedback.descricao}"></td>
             <td th:text="${feedback.nota}"></td>
             <td>
-                <a th:href="@{/feedbacks/{id}(id=${feedback.id})}" class="btn btn-outline-primary">Visualizar</a>
-                <a th:href="@{/feedbacks/editar/{id}(id=${feedback.id})}" class="btn btn-outline-secondary">Editar</a>
-                <a th:href="@{/feedbacks/deletar/{id}(id=${feedback.id})}" class="btn btn-outline-danger" onclick="return confirm('Tem certeza que deseja deletar este feedback?');">Deletar</a>
+                <a th:href="@{/feedbacks/{id}(id=${feedback.id})}" class="btn btn-outline-primary" th:text="#{botao.visualizar}">Visualizar</a>
+                <a th:href="@{/feedbacks/editar/{id}(id=${feedback.id})}" class="btn btn-outline-secondary" th:text="#{botao.editar}">Editar</a>
+                <a th:href="@{/feedbacks/deletar/{id}(id=${feedback.id})}" class="btn btn-outline-danger" onclick="return confirm('#{confirmacao.deletar.feedback}');" th:text="#{botao.deletar}">Deletar</a>
             </td>
         </tr>
         </tbody>
     </table>
-    <a href="/feedbacks/novo" class="btn btn-primary">Novo Feedback</a>
+    <a th:href="@{/feedbacks/novo}" class="btn btn-primary" th:text="#{botao.novoFeedback}">Novo Feedback</a>
 </div>
 
 <!-- Inclui o fragmento do Footer -->

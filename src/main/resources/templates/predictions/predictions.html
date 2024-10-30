@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Predições - ProspAI</title>
+    <title th:text="#{prediction.lista.titulo}">Lista de Predições - ProspAI</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
@@ -13,15 +13,15 @@
 
 <!-- Conteúdo principal -->
 <div class="content">
-    <h1>Lista de Predições</h1>
+    <h1 th:text="#{prediction.lista.heading}">Lista de Predições</h1>
     <table class="table">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Título</th>
-            <th>Descrição</th>
-            <th>Precisão</th>
-            <th>Ações</th>
+            <th th:text="#{prediction.label.id}">ID</th>
+            <th th:text="#{prediction.label.titulo}">Título</th>
+            <th th:text="#{prediction.label.descricao}">Descrição</th>
+            <th th:text="#{prediction.label.precisao}">Precisão</th>
+            <th th:text="#{tabela.acoes}">Ações</th>
         </tr>
         </thead>
         <tbody>
@@ -31,14 +31,14 @@
             <td th:text="${prediction.descricao}"></td>
             <td th:text="${prediction.precisao} + '%'"></td>
             <td>
-                <a th:href="@{/predictions/{id}(id=${prediction.id})}" class="btn btn-outline-primary">Visualizar</a>
-                <a th:href="@{/predictions/editar/{id}(id=${prediction.id})}" class="btn btn-outline-secondary">Editar</a>
-                <a th:href="@{/predictions/deletar/{id}(id=${prediction.id})}" class="btn btn-outline-danger" onclick="return confirm('Tem certeza que deseja deletar esta predição?');">Deletar</a>
+                <a th:href="@{/predictions/{id}(id=${prediction.id})}" class="btn btn-outline-primary" th:text="#{botao.visualizar}">Visualizar</a>
+                <a th:href="@{/predictions/editar/{id}(id=${prediction.id})}" class="btn btn-outline-secondary" th:text="#{botao.editar}">Editar</a>
+                <a th:href="@{/predictions/deletar/{id}(id=${prediction.id})}" class="btn btn-outline-danger" onclick="return confirm('#{confirmacao.deletar.prediction}');" th:text="#{botao.deletar}">Deletar</a>
             </td>
         </tr>
         </tbody>
     </table>
-    <a href="/predictions/novo" class="btn btn-primary">Nova Predição</a>
+    <a th:href="@{/predictions/novo}" class="btn btn-primary" th:text="#{botao.novaPrediction}">Nova Predição</a>
 </div>
 
 <!-- Inclui o fragmento do Footer -->

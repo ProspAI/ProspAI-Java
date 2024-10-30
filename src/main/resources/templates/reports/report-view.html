@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Detalhes do Relatório - ProspAI</title>
+    <title th:text="#{report.detalhes.titulo}">Detalhes do Relatório - ProspAI</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
@@ -13,33 +13,33 @@
 
 <!-- Conteúdo principal -->
 <div class="content">
-    <h1>Detalhes do Relatório</h1>
+    <h1 th:text="#{report.detalhes.heading}">Detalhes do Relatório</h1>
     <dl class="details-list">
-        <dt>ID</dt>
+        <dt th:text="#{report.label.id}">ID</dt>
         <dd th:text="${report.id}"></dd>
 
-        <dt>Título</dt>
+        <dt th:text="#{report.label.titulo}">Título</dt>
         <dd th:text="${report.titulo}"></dd>
 
-        <dt>Descrição</dt>
+        <dt th:text="#{report.label.descricao}">Descrição</dt>
         <dd th:text="${report.descricao}"></dd>
 
-        <dt>Período Inicial</dt>
+        <dt th:text="#{report.label.periodoInicial}">Período Inicial</dt>
         <dd th:text="${#temporals.format(report.periodoInicial, 'dd/MM/yyyy')}"></dd>
 
-        <dt>Período Final</dt>
+        <dt th:text="#{report.label.periodoFinal}">Período Final</dt>
         <dd th:text="${#temporals.format(report.periodoFinal, 'dd/MM/yyyy')}"></dd>
 
-        <dt>Data de Criação</dt>
+        <dt th:text="#{report.label.dataCriacao}">Data de Criação</dt>
         <dd th:text="${#temporals.format(report.dataCriacao, 'dd/MM/yyyy HH:mm')}"></dd>
 
-        <dt>Cliente</dt>
+        <dt th:text="#{report.label.cliente}">Cliente</dt>
         <dd th:text="${report.cliente.nome}"></dd>
     </dl>
     <div class="button-group">
-        <a th:href="@{/reports}" class="btn btn-outline-secondary">Voltar</a>
-        <a th:href="@{/reports/editar/{id}(id=${report.id})}" class="btn btn-outline-primary">Editar</a>
-        <a th:href="@{/reports/deletar/{id}(id=${report.id})}" onclick="return confirm('Tem certeza que deseja deletar este relatório?');" class="btn btn-outline-danger">Deletar</a>
+        <a th:href="@{/reports}" class="btn btn-outline-secondary" th:text="#{botao.voltar}">Voltar</a>
+        <a th:href="@{/reports/editar/{id}(id=${report.id})}" class="btn btn-outline-primary" th:text="#{botao.editar}">Editar</a>
+        <a th:href="@{/reports/deletar/{id}(id=${report.id})}" onclick="return confirm('#{confirmacao.deletar.report}');" class="btn btn-outline-danger" th:text="#{botao.deletar}">Deletar</a>
     </div>
 </div>
 
