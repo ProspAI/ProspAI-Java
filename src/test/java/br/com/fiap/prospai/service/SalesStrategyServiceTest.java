@@ -4,6 +4,7 @@ import br.com.fiap.prospai.dto.request.SalesStrategyRequestDTO;
 import br.com.fiap.prospai.dto.response.SalesStrategyResponseDTO;
 import br.com.fiap.prospai.entity.SalesStrategy;
 import br.com.fiap.prospai.repository.SalesStrategyRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,34 +29,46 @@ class SalesStrategyServiceTest {
     @InjectMocks
     private SalesStrategyService salesStrategyService;
 
+    private SalesStrategy strategy;
+
+    @BeforeEach
+    void setUp() {
+        // Configura uma instância de SalesStrategy antes de cada teste
+        strategy = new SalesStrategy();
+        strategy.setId(1L);
+        strategy.setTitulo("Strategy 1");
+        strategy.setDataImplementacao(LocalDate.now());
+    }
+
     @Test
     void testGetAllSalesStrategies() {
-        SalesStrategy strategy1 = new SalesStrategy();
-        strategy1.setId(1L);
-        strategy1.setTitulo("Strategy 1");
-
+        // Cria uma segunda estratégia para teste
         SalesStrategy strategy2 = new SalesStrategy();
         strategy2.setId(2L);
         strategy2.setTitulo("Strategy 2");
 
-        when(salesStrategyRepository.findAll()).thenReturn(Arrays.asList(strategy1, strategy2));
+        // Mock do retorno do salesStrategyRepository
+        when(salesStrategyRepository.findAll()).thenReturn(Arrays.asList(strategy, strategy2));
 
+        // Executa o serviço
         List<SalesStrategyResponseDTO> strategies = salesStrategyService.getAllSalesStrategies();
 
+        // Verificações
         assertEquals(2, strategies.size());
+        assertEquals("Strategy 1", strategies.get(0).getTitulo());
+        assertEquals("Strategy 2", strategies.get(1).getTitulo());
         verify(salesStrategyRepository, times(1)).findAll();
     }
 
     @Test
     void testGetSalesStrategyById_ExistingId() {
-        SalesStrategy strategy = new SalesStrategy();
-        strategy.setId(1L);
-        strategy.setTitulo("Strategy 1");
-
+        // Mock do retorno do salesStrategyRepository para um ID existente
         when(salesStrategyRepository.findById(1L)).thenReturn(Optional.of(strategy));
 
+        // Executa o serviço
         Optional<SalesStrategyResponseDTO> result = salesStrategyService.getSalesStrategyById(1L);
 
+        // Verificações
         assertTrue(result.isPresent());
         assertEquals("Strategy 1", result.get().getTitulo());
         verify(salesStrategyRepository, times(1)).findById(1L);
@@ -63,19 +76,23 @@ class SalesStrategyServiceTest {
 
     @Test
     void testCreateSalesStrategy() {
+        // Cria o DTO de requisição para SalesStrategy
         SalesStrategyRequestDTO requestDTO = new SalesStrategyRequestDTO();
         requestDTO.setTitulo("Nova Strategy");
         requestDTO.setDescricao("Descrição");
         requestDTO.setDataImplementacao(LocalDate.now());
 
-        SalesStrategy savedStrategy = new SalesStrategy();
-        BeanUtils.copyProperties(requestDTO, savedStrategy);
-        savedStrategy.setId(1L);
+        // Mock do retorno do salesStrategyRepository para salvar a SalesStrategy
+        when(salesStrategyRepository.save(any(SalesStrategy.class))).thenAnswer(invocation -> {
+            SalesStrategy savedStrategy = invocation.getArgument(0);
+            savedStrategy.setId(1L); // Define um ID para a estratégia salva
+            return savedStrategy;
+        });
 
-        when(salesStrategyRepository.save(any(SalesStrategy.class))).thenReturn(savedStrategy);
-
+        // Executa o serviço
         SalesStrategyResponseDTO responseDTO = salesStrategyService.createSalesStrategy(requestDTO);
 
+        // Verificações
         assertNotNull(responseDTO);
         assertEquals("Nova Strategy", responseDTO.getTitulo());
         verify(salesStrategyRepository, times(1)).save(any(SalesStrategy.class));
@@ -83,15 +100,15 @@ class SalesStrategyServiceTest {
 
     @Test
     void testDeleteSalesStrategy_ExistingId() {
-        SalesStrategy existingStrategy = new SalesStrategy();
-        existingStrategy.setId(1L);
+        // Mock do retorno do salesStrategyRepository para encontrar e deletar a estratégia
+        when(salesStrategyRepository.findById(1L)).thenReturn(Optional.of(strategy));
+        doNothing().when(salesStrategyRepository).delete(strategy);
 
-        when(salesStrategyRepository.findById(1L)).thenReturn(Optional.of(existingStrategy));
-        doNothing().when(salesStrategyRepository).delete(existingStrategy);
-
+        // Executa o serviço
         salesStrategyService.deleteSalesStrategy(1L);
 
+        // Verificações
         verify(salesStrategyRepository, times(1)).findById(1L);
-        verify(salesStrategyRepository, times(1)).delete(existingStrategy);
+        verify(salesStrategyRepository, times(1)).delete(strategy);
     }
 }
