@@ -1,14 +1,15 @@
 package br.com.fiap.prospai.config;
 
 import br.com.fiap.prospai.service.CustomUserDetailsService;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.config.annotation.web.builders.*;
-import org.springframework.security.core.userdetails.*;
-import org.springframework.security.crypto.bcrypt.*;
-import org.springframework.security.crypto.password.*;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -40,6 +41,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll() // Permite o acesso aos recursos estáticos
                         .requestMatchers("/login", "/usuarios/novo", "/usuarios/salvar").permitAll() // Permite acesso à página de login e cadastro
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Permite acesso ao Swagger
                         .requestMatchers("/actuator/**").hasRole("ADMIN") // Permite acesso aos endpoints do Actuator
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Rotas que exigem perfil ADMIN
                         .requestMatchers("/monitoramento/**").hasRole("ADMIN")

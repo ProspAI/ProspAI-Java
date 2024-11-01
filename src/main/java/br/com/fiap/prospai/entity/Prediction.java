@@ -21,8 +21,9 @@ public class Prediction extends RepresentationModel<Prediction> {
     @Column(name = "TITULO", nullable = false)
     private String titulo;
 
-    // Remover @NotBlank se necessário
-    @Column(name = "DESCRICAO", nullable = false, columnDefinition = "CLOB")
+    // Atualizado para NVARCHAR(MAX) e uso de @Lob
+    @Lob
+    @Column(name = "DESCRICAO", nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String descricao;
 
     @Column(name = "PRECISAO")

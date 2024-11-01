@@ -9,9 +9,11 @@ import br.com.fiap.prospai.repository.PredictionRepository;
 import br.com.fiap.prospai.repository.ClienteRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.azure.openai.AzureOpenAiChatModel;
+import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -24,14 +26,14 @@ public class PredictionService {
 
     private final PredictionRepository predictionRepository;
     private final ClienteRepository clienteRepository;
-    private final ChatClient chatClient;
+    private final AzureOpenAiChatModel chatModel;
 
     public PredictionService(PredictionRepository predictionRepository,
                              ClienteRepository clienteRepository,
-                             ChatClient.Builder chatClientBuilder) {
+                             AzureOpenAiChatModel chatModel) {
         this.predictionRepository = predictionRepository;
         this.clienteRepository = clienteRepository;
-        this.chatClient = chatClientBuilder.build();
+        this.chatModel = chatModel;
     }
 
     public List<PredictionResponseDTO> getAllPredictions() {
@@ -124,10 +126,12 @@ public class PredictionService {
     private String generateMarketingContent(String promptText) {
         try {
             logger.info("Enviando prompt para IA: {}", promptText);
-            return chatClient.prompt()
-                    .user(promptText)
-                    .call()
-                    .content();
+
+            // Criação do objeto UserMessage com o prompt
+            UserMessage userMessage = new UserMessage(promptText);
+
+            // Chamada ao modelo AzureOpenAiChatModel com UserMessage
+            return chatModel.call(userMessage); // Removido .content()
         } catch (Exception e) {
             logger.error("Erro ao gerar conteúdo de marketing: {}", e.getMessage(), e);
             throw new RuntimeException("Erro ao gerar conteúdo de marketing", e);
