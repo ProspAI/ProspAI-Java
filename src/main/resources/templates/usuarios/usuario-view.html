@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <title th:text="#{usuario.detalhes.titulo}">Detalhes do Usuário - ProspAI</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
 
 <!-- Inclui o fragmento do Header -->
-<div th:insert="fragments/header :: header"></div>
+<div th:insert="~{fragments/header :: header}"></div>
 
 <!-- Conteúdo principal -->
 <div class="content">
@@ -38,7 +38,7 @@
 </div>
 
 <!-- Inclui o fragmento do Footer -->
-<div th:insert="fragments/footer :: footer"></div>
+<div th:insert="~{fragments/footer :: footer}"></div>
 
 </body>
 </html>

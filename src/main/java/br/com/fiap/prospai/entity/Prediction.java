@@ -21,8 +21,8 @@ public class Prediction extends RepresentationModel<Prediction> {
     @Column(name = "TITULO", nullable = false)
     private String titulo;
 
-    @NotBlank
-    @Column(name = "DESCRICAO", nullable = false)
+    // Remover @NotBlank se necessário
+    @Column(name = "DESCRICAO", nullable = false, columnDefinition = "CLOB")
     private String descricao;
 
     @Column(name = "PRECISAO")

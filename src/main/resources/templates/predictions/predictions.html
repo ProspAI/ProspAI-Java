@@ -19,7 +19,6 @@
         <tr>
             <th th:text="#{prediction.label.id}">ID</th>
             <th th:text="#{prediction.label.titulo}">Título</th>
-            <th th:text="#{prediction.label.descricao}">Descrição</th>
             <th th:text="#{prediction.label.precisao}">Precisão</th>
             <th th:text="#{tabela.acoes}">Ações</th>
         </tr>
@@ -28,7 +27,6 @@
         <tr th:each="prediction : ${predictions}">
             <td th:text="${prediction.id}"></td>
             <td th:text="${prediction.titulo}"></td>
-            <td th:text="${prediction.descricao}"></td>
             <td th:text="${prediction.precisao} + '%'"></td>
             <td>
                 <a th:href="@{/predictions/{id}(id=${prediction.id})}" class="btn btn-outline-primary" th:text="#{botao.visualizar}">Visualizar</a>

@@ -2,18 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${#strings.isEmpty(usuario.id) ? #{usuario.form.titulo.novo} : #{usuario.form.titulo.editar}}"></title>
+    <title th:with="tituloNovo=#{usuario.form.titulo.novo}, tituloEditar=#{usuario.form.titulo.editar}"
+           th:text="${#strings.isEmpty(usuario.id) ? tituloNovo : tituloEditar}">Formulário de Usuário</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
 
 <!-- Inclui o fragmento do Header -->
-<div th:insert="fragments/header :: header"></div>
+<div th:insert="~{fragments/header :: header}"></div>
 
 <!-- Conteúdo principal -->
-<div class="content">
-    <h1 th:text="${#strings.isEmpty(usuario.id) ? #{usuario.form.heading.novo} : #{usuario.form.heading.editar}}"></h1>
+<div class="content" th:with="headingNovo=#{usuario.form.heading.novo}, headingEditar=#{usuario.form.heading.editar}">
+    <h1 th:text="${#strings.isEmpty(usuario.id) ? headingNovo : headingEditar}">Formulário de Usuário</h1>
+
     <form th:action="@{/usuarios/salvar}" th:object="${usuario}" method="post" class="form">
         <input type="hidden" th:field="*{id}"/>
 
@@ -60,7 +62,7 @@
 </div>
 
 <!-- Inclui o fragmento do Footer -->
-<div th:insert="fragments/footer :: footer"></div>
+<div th:insert="~{fragments/footer :: footer}"></div>
 
 </body>
 </html>

@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${#strings.isEmpty(feedback.id) ? #{feedback.form.titulo.novo} : #{feedback.form.titulo.editar}}">Formulário de Feedback - ProspAI</title>
+    <title th:with="tituloNovo=#{feedback.form.titulo.novo}, tituloEditar=#{feedback.form.titulo.editar}"
+           th:text="${#strings.isEmpty(feedback.id) ? tituloNovo : tituloEditar}">Formulário de Feedback - ProspAI</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
@@ -14,8 +15,9 @@
 <div th:insert="fragments/header :: header"></div>
 
 <!-- Conteúdo principal -->
-<div class="content">
-    <h1 th:text="${#strings.isEmpty(feedback.id) ? #{feedback.form.heading.novo} : #{feedback.form.heading.editar}}">Formulário de Feedback</h1>
+<div class="content" th:with="headingNovo=#{feedback.form.heading.novo}, headingEditar=#{feedback.form.heading.editar}">
+    <h1 th:text="${#strings.isEmpty(feedback.id) ? headingNovo : headingEditar}">Formulário de Feedback</h1>
+
     <form th:action="@{/feedbacks/salvar}" th:object="${feedback}" method="post" class="form">
         <input type="hidden" th:field="*{id}"/>
 

@@ -20,8 +20,8 @@ public class LoginController {
     }
 
     @GetMapping("/")
-    public String home() {
-        return "home"; // Página inicial após login (home.html)
+    public String redirectToClientes() {
+        return "redirect:/clientes";
     }
 
     @GetMapping("/access-denied")

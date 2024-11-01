@@ -2,98 +2,55 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${#strings.isEmpty(cliente.id) ? #{cliente.form.titulo.novo} : #{cliente.form.titulo.editar}}">Formulário de Cliente - ProspAI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title th:with="tituloKey=${#strings.isEmpty(cliente.id) ? 'cliente.form.titulo.novo' : 'cliente.form.titulo.editar'}"
+           th:text="#{${tituloKey}}">Formulário de Cliente - ProspAI</title>
     <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 </head>
 <body>
 
 <!-- Inclui o fragmento do Header -->
-<div th:insert="fragments/header :: header"></div>
+<div th:insert="~{fragments/header :: header}"></div>
 
-<!-- Conteúdo principal -->
 <div class="content">
-    <h1 th:text="${#strings.isEmpty(cliente.id) ? #{cliente.form.heading.novo} : #{cliente.form.heading.editar}}">Formulário de Cliente</h1>
-    <form th:action="@{/clientes/salvar}" th:object="${cliente}" method="post" class="form" onsubmit="return validateForm()">
+    <h1 th:with="headingKey=${#strings.isEmpty(cliente.id) ? 'cliente.form.heading.novo' : 'cliente.form.heading.editar'}"
+        th:text="#{${headingKey}}">Formulário de Cliente</h1>
+    <form th:action="@{/clientes/salvar}" th:object="${cliente}" method="post">
         <input type="hidden" th:field="*{id}"/>
 
-        <!-- Campo para Nome -->
         <div class="form-group">
-            <label for="nome" th:text="#{cliente.label.nome}">Nome</label>
-            <input type="text" th:field="*{nome}" id="nome" class="form-control" required/>
-            <div th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="error-message"></div>
+            <label th:text="#{cliente.label.nome}">Nome</label>
+            <input type="text" th:field="*{nome}" required/>
         </div>
 
-        <!-- Campo de Email -->
         <div class="form-group">
-            <label for="email" th:text="#{cliente.label.email}">Email</label>
-            <input type="email" th:field="*{email}" id="email" class="form-control" required placeholder="exemplo@dominio.com"/>
-            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message"></div>
+            <label th:text="#{cliente.label.email}">Email</label>
+            <input type="email" th:field="*{email}" required/>
         </div>
 
-        <!-- Campo de Telefone -->
         <div class="form-group">
-            <label for="telefone" th:text="#{cliente.label.telefone}">Telefone</label>
-            <input id="telefone" type="tel" th:field="*{telefone}" class="form-control" required/>
-            <small id="phoneHelp"></small>
-            <div th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}" class="error-message"></div>
+            <label th:text="#{cliente.label.telefone}">Telefone</label>
+            <input type="tel" th:field="*{telefone}" required/>
         </div>
 
-        <!-- Campo para Segmento de Mercado -->
         <div class="form-group">
-            <label for="segmentoMercado" th:text="#{cliente.label.segmentoMercado}">Segmento de Mercado</label>
-            <input type="text" th:field="*{segmentoMercado}" id="segmentoMercado" class="form-control" required/>
-            <div th:if="${#fields.hasErrors('segmentoMercado')}" th:errors="*{segmentoMercado}" class="error-message"></div>
+            <label th:text="#{cliente.label.segmentoMercado}">Segmento de Mercado</label>
+            <input type="text" th:field="*{segmentoMercado}"/>
         </div>
 
-        <!-- Campo para Score de Engajamento -->
         <div class="form-group">
-            <label for="scoreEngajamento" th:text="#{cliente.label.scoreEngajamento}">Score de Engajamento</label>
-            <input type="number" step="0.01" th:field="*{scoreEngajamento}" id="scoreEngajamento" class="form-control" required placeholder="0.00"/>
-            <div th:if="${#fields.hasErrors('scoreEngajamento')}" th:errors="*{scoreEngajamento}" class="error-message"></div>
+            <label th:text="#{cliente.label.scoreEngajamento}">Score de Engajamento</label>
+            <input type="number" step="0.01" th:field="*{scoreEngajamento}" required/>
         </div>
 
-        <!-- Botões de Ação -->
         <div class="button-group">
-            <button type="submit" class="btn btn-primary" th:text="#{botao.salvar}">Salvar</button>
-            <a th:href="@{/clientes}" class="btn btn-outline-danger" th:text="#{botao.cancelar}">Cancelar</a>
+            <button type="submit" th:text="#{botao.salvar}">Salvar</button>
+            <a th:href="@{/clientes}" th:text="#{botao.cancelar}">Cancelar</a>
         </div>
     </form>
 </div>
 
 <!-- Inclui o fragmento do Footer -->
-<div th:insert="fragments/footer :: footer"></div>
-
-<!-- Scripts para telefone -->
-<script>
-    const input = document.querySelector("#telefone");
-    const iti = window.intlTelInput(input, {
-        initialCountry: "auto",
-        separateDialCode: true,
-        utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
-    });
-
-    iti.promise.then(() => {
-        input.addEventListener("countrychange", function() {
-            const exampleNumber = iti.getSelectedCountryData().exampleNumber;
-            document.getElementById("phoneHelp").textContent = `Formato: ${exampleNumber}`;
-        });
-    });
-
-    function validateForm() {
-        if (!iti.isValidNumber()) {
-            alert("Por favor, insira um número de telefone válido.");
-            return false;
-        }
-        return true;
-    }
-
-    document.querySelector("form").addEventListener("submit", function() {
-        input.value = iti.getNumber();
-    });
-</script>
+<div th:insert="~{fragments/footer :: footer}"></div>
 
 </body>
 </html>

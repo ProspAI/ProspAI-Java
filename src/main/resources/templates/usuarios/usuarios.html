@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <title th:text="#{usuario.lista.titulo}">Lista de Usuários - ProspAI</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
 
 <!-- Inclui o fragmento do Header -->
-<div th:insert="fragments/header :: header"></div>
+<div th:insert="~{fragments/header :: header}"></div>
 
 <!-- Conteúdo principal -->
 <div class="content">
@@ -31,7 +31,7 @@
             <td th:text="${usuario.nome}"></td>
             <td th:text="${usuario.email}"></td>
             <td th:text="${usuario.papel}"></td>
-            <td th:text="${usuario.ativo ? #{usuario.label.sim} : #{usuario.label.nao}}"></td>
+            <td th:text="${usuario.ativo ? 'Sim' : 'Não'}"></td>
             <td>
                 <a th:href="@{/usuarios/{id}(id=${usuario.id})}" class="btn btn-outline-primary" th:text="#{botao.visualizar}">Visualizar</a>
                 <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}" class="btn btn-outline-secondary" th:text="#{botao.editar}">Editar</a>
@@ -44,7 +44,7 @@
 </div>
 
 <!-- Inclui o fragmento do Footer -->
-<div th:insert="fragments/footer :: footer"></div>
+<div th:insert="~{fragments/footer :: footer}"></div>
 
 </body>
 </html>

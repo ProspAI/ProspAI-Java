@@ -7,16 +7,11 @@ import br.com.fiap.prospai.entity.Prediction;
 import br.com.fiap.prospai.entity.Cliente;
 import br.com.fiap.prospai.repository.PredictionRepository;
 import br.com.fiap.prospai.repository.ClienteRepository;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.openai.OpenAiChatModel;
-import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -29,14 +24,14 @@ public class PredictionService {
 
     private final PredictionRepository predictionRepository;
     private final ClienteRepository clienteRepository;
-    private final OpenAiChatModel chatModel;
+    private final ChatClient chatClient;
 
     public PredictionService(PredictionRepository predictionRepository,
                              ClienteRepository clienteRepository,
-                             OpenAiChatModel chatModel) {
+                             ChatClient.Builder chatClientBuilder) {
         this.predictionRepository = predictionRepository;
         this.clienteRepository = clienteRepository;
-        this.chatModel = chatModel;
+        this.chatClient = chatClientBuilder.build();
     }
 
     public List<PredictionResponseDTO> getAllPredictions() {
@@ -87,7 +82,7 @@ public class PredictionService {
         Prediction prediction = predictionRepository.findById(id)
                 .orElseThrow(() -> {
                     logger.error("Predição não encontrada com ID: {}", id);
-                    return new RuntimeException("Prediction não encontrada com id: " + id);
+                    return new RuntimeException("Predição não encontrada com id: " + id);
                 });
 
         Cliente cliente = clienteRepository.findById(predictionRequestDTO.getClienteId())
@@ -96,8 +91,13 @@ public class PredictionService {
                     return new RuntimeException("Cliente não encontrado com id: " + predictionRequestDTO.getClienteId());
                 });
 
-        BeanUtils.copyProperties(predictionRequestDTO, prediction, "id", "dataGeracao", "cliente");
+        BeanUtils.copyProperties(predictionRequestDTO, prediction, "id", "dataGeracao", "cliente", "descricao");
         prediction.setCliente(cliente);
+
+        // Regenerar a descrição usando a IA
+        String promptText = generatePromptText(cliente, predictionRequestDTO);
+        String generatedContent = generateMarketingContent(promptText);
+        prediction.setDescricao(generatedContent);
 
         Prediction predictionAtualizada = predictionRepository.save(prediction);
         logger.info("Predição atualizada com sucesso: ID={}", predictionAtualizada.getId());
@@ -110,32 +110,22 @@ public class PredictionService {
         Prediction prediction = predictionRepository.findById(id)
                 .orElseThrow(() -> {
                     logger.error("Predição não encontrada com ID: {}", id);
-                    return new RuntimeException("Prediction não encontrada com id: " + id);
+                    return new RuntimeException("Predição não encontrada com id: " + id);
                 });
         predictionRepository.delete(prediction);
         logger.info("Predição deletada com sucesso: ID={}", id);
     }
 
     private String generatePromptText(Cliente cliente, PredictionRequestDTO predictionRequestDTO) {
-        return String.format(
-                "Baseado nos seguintes dados do cliente:\n" +
-                        "Nome: %s\n" +
-                        "Segmento de Mercado: %s\n" +
-                        "Score de Engajamento: %.2f\n" +
-                        "Descrição: %s\n" +
-                        "Crie uma campanha de marketing personalizada que inclua um título e conteúdo para um email.",
-                cliente.getNome(), cliente.getSegmentoMercado(), cliente.getScoreEngajamento(), predictionRequestDTO.getDescricao()
-        );
+        return String.format("Gere um conteúdo de marketing para o cliente %s com base no título: '%s'.",
+                cliente.getNome(), predictionRequestDTO.getTitulo());
     }
 
     private String generateMarketingContent(String promptText) {
-        logger.info("Gerando conteúdo de marketing com prompt: {}", promptText);
-        OpenAiChatOptions options = OpenAiChatOptions.builder().withModel("gpt-3.5-turbo").build();
-        ChatResponse chatResponse = chatModel.call(new Prompt(promptText, options));
-
-        String generatedContent = chatResponse.getResult().getOutput().getContent();
-        logger.info("Conteúdo gerado com sucesso");
-        return generatedContent;
+        return chatClient.prompt()
+                .user(promptText)
+                .call()
+                .content();
     }
 
     private PredictionResponseDTO toResponseDTO(Prediction prediction) {
