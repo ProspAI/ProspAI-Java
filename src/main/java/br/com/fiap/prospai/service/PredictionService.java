@@ -122,10 +122,16 @@ public class PredictionService {
     }
 
     private String generateMarketingContent(String promptText) {
-        return chatClient.prompt()
-                .user(promptText)
-                .call()
-                .content();
+        try {
+            logger.info("Enviando prompt para IA: {}", promptText);
+            return chatClient.prompt()
+                    .user(promptText)
+                    .call()
+                    .content();
+        } catch (Exception e) {
+            logger.error("Erro ao gerar conteúdo de marketing: {}", e.getMessage(), e);
+            throw new RuntimeException("Erro ao gerar conteúdo de marketing", e);
+        }
     }
 
     private PredictionResponseDTO toResponseDTO(Prediction prediction) {
