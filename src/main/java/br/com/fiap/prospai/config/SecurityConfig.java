@@ -46,6 +46,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Rotas que exigem perfil ADMIN
                         .requestMatchers("/monitoramento/**").hasRole("ADMIN")
                         .requestMatchers("/actuator/health", "/actuator/info").permitAll()
+                        .requestMatchers("/usuarios/**").hasRole("ADMIN") // Permite acesso a /usuarios apenas para ADMIN
                         .anyRequest().authenticated() // Qualquer outra rota precisa estar autenticada
                 )
                 .formLogin(form -> form
@@ -59,7 +60,7 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .exceptionHandling(exception -> exception
-                        .accessDeniedPage("/access-denied")
+                        .accessDeniedPage("/access-denied") // Página de acesso negado
                 );
 
         return http.build();

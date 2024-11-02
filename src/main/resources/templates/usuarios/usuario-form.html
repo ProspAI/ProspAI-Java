@@ -43,7 +43,11 @@
         <!-- Campo para Papel -->
         <div class="form-group">
             <label for="papel" th:text="#{usuario.label.papel}">Papel</label>
-            <input type="text" th:field="*{papel}" id="papel" class="form-control" required/>
+            <select th:field="*{papel}" id="papel" class="form-control">
+                <option value="ROLE_USER" th:text="#{usuario.label.sim}">Usuário</option>
+                <!-- Apenas administradores podem ver a opção ROLE_ADMIN -->
+                <option value="ROLE_ADMIN" th:if="${isAdmin}" th:text="#{usuario.label.nao}">Administrador</option>
+            </select>
             <div th:if="${#fields.hasErrors('papel')}" th:errors="*{papel}" class="error-message"></div>
         </div>
 

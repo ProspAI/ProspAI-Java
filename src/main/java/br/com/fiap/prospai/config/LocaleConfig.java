@@ -1,7 +1,9 @@
 package br.com.fiap.prospai.config;
 
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -32,10 +34,9 @@ public class LocaleConfig implements WebMvcConfigurer {
 
     // Configura o recurso de mensagens, que permite acessar os arquivos de propriedades de mensagens
     @Bean
-    public ResourceBundleMessageSource messageSource() {
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-        messageSource.setBasename("messages"); // Nome base dos arquivos de propriedades (ex: messages_pt_BR.properties)
-        messageSource.setDefaultEncoding("UTF-8"); // Configura o encoding para UTF-8
+    public MessageSource messageSource() {
+        Utf8ResourceBundleMessageSource messageSource = new Utf8ResourceBundleMessageSource();
+        messageSource.setBasename("messages");
         return messageSource;
     }
 

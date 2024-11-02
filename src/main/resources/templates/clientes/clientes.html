@@ -5,12 +5,14 @@
     <title th:text="#{cliente.lista.titulo}">Lista de Clientes - ProspAI</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
 </head>
 <body>
 
 <!-- Inclui o fragmento do Header -->
-<div th:insert="~{fragments/header :: header}"></div>
+<div th:insert="fragments/header :: header"></div>
 
+<!-- Conteúdo principal -->
 <div class="content">
     <h1 th:text="#{cliente.lista.heading}">Lista de Clientes</h1>
     <table>
@@ -30,9 +32,10 @@
             <td th:text="${cliente.email}"></td>
             <td th:text="${cliente.telefone}"></td>
             <td>
-                <a th:href="@{/clientes/{id}(id=${cliente.id})}" th:text="#{botao.visualizar}">Visualizar</a>
-                <a th:href="@{/clientes/editar/{id}(id=${cliente.id})}" th:text="#{botao.editar}">Editar</a>
-                <a th:href="@{/clientes/deletar/{id}(id=${cliente.id})}" th:text="#{botao.deletar}" onclick="return confirm('#{confirmacao.deletar.cliente}');">Deletar</a>
+                <a th:href="@{/clientes/{id}(id=${cliente.id})}" th:text="#{botao.visualizar}" class="btn btn-outline-primary">Visualizar</a>
+                <a th:href="@{/clientes/editar/{id}(id=${cliente.id})}" th:text="#{botao.editar}" class="btn btn-outline-secondary">Editar</a>
+                <a th:href="@{/clientes/deletar/{id}(id=${cliente.id})}" th:text="#{botao.deletar}" class="btn btn-outline-danger"
+                   onclick="return confirm('#{confirmacao.deletar.cliente}');">Deletar</a>
             </td>
         </tr>
         </tbody>
@@ -41,7 +44,9 @@
 </div>
 
 <!-- Inclui o fragmento do Footer -->
-<div th:insert="~{fragments/footer :: footer}"></div>
+<div th:insert="fragments/footer :: footer"></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+<script src="/js/scripts.js"></script>
 </body>
 </html>
