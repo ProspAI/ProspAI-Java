@@ -9,7 +9,6 @@ import br.com.fiap.prospai.repository.FeedbackRepository;
 import br.com.fiap.prospai.repository.ClienteRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,18 +21,17 @@ public class FeedbackService {
 
     private final FeedbackRepository feedbackRepository;
     private final ClienteRepository clienteRepository;
-    private final KafkaTemplate<String, String> kafkaTemplate; // Adicionando KafkaTemplate
+    private final KafkaProducerService kafkaProducerService;
 
     @Autowired
-    public FeedbackService(FeedbackRepository feedbackRepository, ClienteRepository clienteRepository, KafkaTemplate<String, String> kafkaTemplate) {
+    public FeedbackService(FeedbackRepository feedbackRepository, ClienteRepository clienteRepository, KafkaProducerService kafkaProducerService) {
         this.feedbackRepository = feedbackRepository;
         this.clienteRepository = clienteRepository;
-        this.kafkaTemplate = kafkaTemplate;
+        this.kafkaProducerService = kafkaProducerService;
     }
 
     public List<FeedbackResponseDTO> getAllFeedbacks() {
-        List<Feedback> feedbacks = feedbackRepository.findAll();
-        return feedbacks.stream()
+        return feedbackRepository.findAll().stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
@@ -53,7 +51,12 @@ public class FeedbackService {
         Feedback novoFeedback = feedbackRepository.save(feedback);
 
         // Enviar mensagem ao Kafka após criar feedback
-        kafkaTemplate.send("feedback_topic", "Novo feedback criado com ID: " + novoFeedback.getId());
+        try {
+            FeedbackResponseDTO feedbackResponseDTO = toResponseDTO(novoFeedback);
+            kafkaProducerService.sendMessage("feedback_topic", feedbackResponseDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return toResponseDTO(novoFeedback);
     }
@@ -66,7 +69,12 @@ public class FeedbackService {
         Feedback feedbackAtualizado = feedbackRepository.save(feedback);
 
         // Enviar mensagem ao Kafka após atualizar feedback
-        kafkaTemplate.send("feedback_topic", "Feedback atualizado com ID: " + feedbackAtualizado.getId());
+        try {
+            FeedbackResponseDTO feedbackResponseDTO = toResponseDTO(feedbackAtualizado);
+            kafkaProducerService.sendMessage("feedback_topic", feedbackResponseDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return toResponseDTO(feedbackAtualizado);
     }
@@ -77,7 +85,12 @@ public class FeedbackService {
         feedbackRepository.delete(feedback);
 
         // Enviar mensagem ao Kafka após excluir feedback
-        kafkaTemplate.send("feedback_topic", "Feedback deletado com ID: " + id);
+        try {
+            FeedbackResponseDTO feedbackResponseDTO = toResponseDTO(feedback);
+            kafkaProducerService.sendMessage("feedback_topic", feedbackResponseDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private FeedbackResponseDTO toResponseDTO(Feedback feedback) {

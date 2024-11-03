@@ -8,7 +8,6 @@ import br.com.fiap.prospai.repository.ReportRepository;
 import br.com.fiap.prospai.repository.ClienteRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,18 +20,17 @@ public class ReportService {
 
     private final ReportRepository reportRepository;
     private final ClienteRepository clienteRepository;
-    private final KafkaTemplate<String, String> kafkaTemplate; // Adicionando o KafkaTemplate
+    private final KafkaProducerService kafkaProducerService;
 
     @Autowired
-    public ReportService(ReportRepository reportRepository, ClienteRepository clienteRepository, KafkaTemplate<String, String> kafkaTemplate) {
+    public ReportService(ReportRepository reportRepository, ClienteRepository clienteRepository, KafkaProducerService kafkaProducerService) {
         this.reportRepository = reportRepository;
         this.clienteRepository = clienteRepository;
-        this.kafkaTemplate = kafkaTemplate;
+        this.kafkaProducerService = kafkaProducerService;
     }
 
     public List<ReportResponseDTO> getAllReports() {
-        List<Report> reports = reportRepository.findAll();
-        return reports.stream()
+        return reportRepository.findAll().stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
@@ -52,7 +50,12 @@ public class ReportService {
         Report novoReport = reportRepository.save(report);
 
         // Enviar mensagem ao Kafka após a criação do relatório
-        kafkaTemplate.send("report_topic", "Novo relatório criado com ID: " + novoReport.getId());
+        try {
+            ReportResponseDTO reportResponseDTO = toResponseDTO(novoReport);
+            kafkaProducerService.sendMessage("report_topic", reportResponseDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return toResponseDTO(novoReport);
     }
@@ -65,7 +68,12 @@ public class ReportService {
         Report reportAtualizado = reportRepository.save(report);
 
         // Enviar mensagem ao Kafka após a atualização do relatório
-        kafkaTemplate.send("report_topic", "Relatório atualizado com ID: " + reportAtualizado.getId());
+        try {
+            ReportResponseDTO reportResponseDTO = toResponseDTO(reportAtualizado);
+            kafkaProducerService.sendMessage("report_topic", reportResponseDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return toResponseDTO(reportAtualizado);
     }
@@ -76,7 +84,12 @@ public class ReportService {
         reportRepository.delete(report);
 
         // Enviar mensagem ao Kafka após a exclusão do relatório
-        kafkaTemplate.send("report_topic", "Relatório deletado com ID: " + id);
+        try {
+            ReportResponseDTO reportResponseDTO = toResponseDTO(report);
+            kafkaProducerService.sendMessage("report_topic", reportResponseDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private ReportResponseDTO toResponseDTO(Report report) {

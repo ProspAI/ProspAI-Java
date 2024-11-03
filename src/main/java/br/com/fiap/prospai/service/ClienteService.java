@@ -6,7 +6,6 @@ import br.com.fiap.prospai.entity.Cliente;
 import br.com.fiap.prospai.repository.ClienteRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,17 +17,16 @@ import java.util.stream.Collectors;
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
-    private final KafkaTemplate<String, String> kafkaTemplate; // Adicionando KafkaTemplate
+    private final KafkaProducerService kafkaProducerService;
 
     @Autowired
-    public ClienteService(ClienteRepository clienteRepository, KafkaTemplate<String, String> kafkaTemplate) {
+    public ClienteService(ClienteRepository clienteRepository, KafkaProducerService kafkaProducerService) {
         this.clienteRepository = clienteRepository;
-        this.kafkaTemplate = kafkaTemplate;
+        this.kafkaProducerService = kafkaProducerService;
     }
 
     public List<ClienteResponseDTO> getAllClientes() {
-        List<Cliente> clientes = clienteRepository.findAll();
-        return clientes.stream()
+        return clienteRepository.findAll().stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
@@ -45,7 +43,13 @@ public class ClienteService {
         Cliente novoCliente = clienteRepository.save(cliente);
 
         // Enviar mensagem de cliente criado
-        kafkaTemplate.send("clientes_topic", "Novo cliente criado com ID: " + novoCliente.getId());
+        try {
+            ClienteResponseDTO clienteResponseDTO = toResponseDTO(novoCliente);
+            kafkaProducerService.sendMessage("clientes_topic", clienteResponseDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Logar o erro, mas não interromper o fluxo
+        }
 
         return toResponseDTO(novoCliente);
     }
@@ -58,7 +62,12 @@ public class ClienteService {
         Cliente clienteAtualizado = clienteRepository.save(cliente);
 
         // Enviar mensagem de cliente atualizado
-        kafkaTemplate.send("clientes_topic", "Cliente atualizado com ID: " + clienteAtualizado.getId());
+        try {
+            ClienteResponseDTO clienteResponseDTO = toResponseDTO(clienteAtualizado);
+            kafkaProducerService.sendMessage("clientes_topic", clienteResponseDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return toResponseDTO(clienteAtualizado);
     }
@@ -69,7 +78,12 @@ public class ClienteService {
         clienteRepository.delete(cliente);
 
         // Enviar mensagem de cliente deletado
-        kafkaTemplate.send("clientes_topic", "Cliente deletado com ID: " + id);
+        try {
+            ClienteResponseDTO clienteResponseDTO = toResponseDTO(cliente);
+            kafkaProducerService.sendMessage("clientes_topic", clienteResponseDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private ClienteResponseDTO toResponseDTO(Cliente cliente) {

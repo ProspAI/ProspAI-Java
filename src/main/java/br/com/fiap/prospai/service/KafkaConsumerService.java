@@ -8,6 +8,7 @@ import br.com.fiap.prospai.dto.response.ReportResponseDTO;
 import br.com.fiap.prospai.dto.response.SalesStrategyResponseDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired; // Importação adicionada
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,10 @@ import org.springframework.stereotype.Service;
 public class KafkaConsumerService {
 
     private static final Logger logger = LoggerFactory.getLogger(KafkaConsumerService.class);
+
     private final ObjectMapper objectMapper;
 
+    @Autowired // Anotação adicionada para injeção do ObjectMapper
     public KafkaConsumerService(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
@@ -30,6 +33,8 @@ public class KafkaConsumerService {
             ack.acknowledge();
         } catch (Exception e) {
             logger.error("Erro ao processar mensagem de cliente: {}", e.getMessage(), e);
+            // Decisão: Acknowledge a mensagem mesmo em caso de erro para evitar reprocessamento infinito
+            ack.acknowledge();
         }
     }
 
@@ -41,6 +46,7 @@ public class KafkaConsumerService {
             ack.acknowledge();
         } catch (Exception e) {
             logger.error("Erro ao processar mensagem de feedback: {}", e.getMessage(), e);
+            ack.acknowledge();
         }
     }
 
@@ -52,6 +58,7 @@ public class KafkaConsumerService {
             ack.acknowledge();
         } catch (Exception e) {
             logger.error("Erro ao processar mensagem de predição: {}", e.getMessage(), e);
+            ack.acknowledge();
         }
     }
 
@@ -63,6 +70,7 @@ public class KafkaConsumerService {
             ack.acknowledge();
         } catch (Exception e) {
             logger.error("Erro ao processar mensagem de relatório: {}", e.getMessage(), e);
+            ack.acknowledge();
         }
     }
 
@@ -74,6 +82,7 @@ public class KafkaConsumerService {
             ack.acknowledge();
         } catch (Exception e) {
             logger.error("Erro ao processar mensagem de estratégia de vendas: {}", e.getMessage(), e);
+            ack.acknowledge();
         }
     }
 

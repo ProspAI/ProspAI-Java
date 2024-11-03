@@ -12,7 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.azure.openai.AzureOpenAiChatModel;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,13 +29,17 @@ public class PredictionService {
     private final PredictionRepository predictionRepository;
     private final ClienteRepository clienteRepository;
     private final AzureOpenAiChatModel chatModel;
+    private final KafkaProducerService kafkaProducerService; // Adicionado para uso do Kafka
 
+    @Autowired
     public PredictionService(PredictionRepository predictionRepository,
                              ClienteRepository clienteRepository,
-                             AzureOpenAiChatModel chatModel) {
+                             AzureOpenAiChatModel chatModel,
+                             KafkaProducerService kafkaProducerService) {
         this.predictionRepository = predictionRepository;
         this.clienteRepository = clienteRepository;
         this.chatModel = chatModel;
+        this.kafkaProducerService = kafkaProducerService; // Injeção do KafkaProducerService
     }
 
     public List<PredictionResponseDTO> getAllPredictions() {
@@ -49,6 +55,7 @@ public class PredictionService {
                 .map(this::toResponseDTO);
     }
 
+    @Transactional
     public PredictionResponseDTO createPrediction(PredictionRequestDTO predictionRequestDTO, Long clienteId) {
         logger.info("Criando nova predição para o cliente com ID: {}", clienteId);
 
@@ -72,6 +79,14 @@ public class PredictionService {
             Prediction novaPrediction = predictionRepository.save(prediction);
             logger.info("Predição criada com sucesso: ID={}", novaPrediction.getId());
 
+            // Enviar mensagem ao Kafka
+            try {
+                PredictionResponseDTO predictionResponseDTO = toResponseDTO(novaPrediction);
+                kafkaProducerService.sendMessage("prediction_topic", predictionResponseDTO);
+            } catch (Exception e) {
+                logger.error("Erro ao enviar mensagem para o Kafka: {}", e.getMessage(), e);
+            }
+
             return toResponseDTO(novaPrediction);
         } catch (Exception e) {
             logger.error("Erro ao gerar predição: {}", e.getMessage(), e);
@@ -79,6 +94,7 @@ public class PredictionService {
         }
     }
 
+    @Transactional
     public PredictionResponseDTO updatePrediction(Long id, PredictionRequestDTO predictionRequestDTO) {
         logger.info("Atualizando predição com ID: {}", id);
         Prediction prediction = predictionRepository.findById(id)
@@ -104,9 +120,18 @@ public class PredictionService {
         Prediction predictionAtualizada = predictionRepository.save(prediction);
         logger.info("Predição atualizada com sucesso: ID={}", predictionAtualizada.getId());
 
+        // Enviar mensagem ao Kafka
+        try {
+            PredictionResponseDTO predictionResponseDTO = toResponseDTO(predictionAtualizada);
+            kafkaProducerService.sendMessage("prediction_topic", predictionResponseDTO);
+        } catch (Exception e) {
+            logger.error("Erro ao enviar mensagem para o Kafka: {}", e.getMessage(), e);
+        }
+
         return toResponseDTO(predictionAtualizada);
     }
 
+    @Transactional
     public void deletePrediction(Long id) {
         logger.info("Deletando predição com ID: {}", id);
         Prediction prediction = predictionRepository.findById(id)
@@ -116,6 +141,14 @@ public class PredictionService {
                 });
         predictionRepository.delete(prediction);
         logger.info("Predição deletada com sucesso: ID={}", id);
+
+        // Enviar mensagem ao Kafka
+        try {
+            PredictionResponseDTO predictionResponseDTO = toResponseDTO(prediction);
+            kafkaProducerService.sendMessage("prediction_topic", predictionResponseDTO);
+        } catch (Exception e) {
+            logger.error("Erro ao enviar mensagem para o Kafka: {}", e.getMessage(), e);
+        }
     }
 
     private String generatePromptText(Cliente cliente, PredictionRequestDTO predictionRequestDTO) {
@@ -131,7 +164,7 @@ public class PredictionService {
             UserMessage userMessage = new UserMessage(promptText);
 
             // Chamada ao modelo AzureOpenAiChatModel com UserMessage
-            return chatModel.call(userMessage); // Removido .content()
+            return chatModel.call(userMessage); // Mantido conforme sua lógica
         } catch (Exception e) {
             logger.error("Erro ao gerar conteúdo de marketing: {}", e.getMessage(), e);
             throw new RuntimeException("Erro ao gerar conteúdo de marketing", e);

@@ -1,4 +1,3 @@
-// UsuarioService.java
 package br.com.fiap.prospai.service;
 
 import br.com.fiap.prospai.dto.request.UsuarioRequestDTO;
@@ -20,25 +19,23 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    // Método para buscar todos os usuários
     public List<UsuarioResponseDTO> getAllUsuarios() {
         return usuarioRepository.findAll().stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
-    // Método para buscar um usuário pelo ID
     public Optional<UsuarioResponseDTO> getUsuarioById(Long id) {
         return usuarioRepository.findById(id)
                 .map(this::toResponseDTO);
     }
 
-    // Método para criar um novo usuário
     public UsuarioResponseDTO createUsuario(UsuarioRequestDTO usuarioRequestDTO) {
         Usuario usuario = new Usuario();
         BeanUtils.copyProperties(usuarioRequestDTO, usuario);
@@ -57,7 +54,6 @@ public class UsuarioService {
         return toResponseDTO(novoUsuario);
     }
 
-    // Método para atualizar um usuário existente
     public UsuarioResponseDTO updateUsuario(Long id, UsuarioRequestDTO usuarioRequestDTO) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario não encontrado com id: " + id));
@@ -75,7 +71,6 @@ public class UsuarioService {
         return toResponseDTO(usuarioAtualizado);
     }
 
-    // Método para deletar um usuário pelo ID
     public void deleteUsuario(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario não encontrado com id: " + id));
