@@ -7,7 +7,6 @@ import br.com.fiap.prospai.repository.SalesStrategyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-import org.springframework.kafka.core.KafkaTemplate;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -24,7 +23,7 @@ class SalesStrategyServiceTest {
     private SalesStrategyRepository salesStrategyRepository;
 
     @Mock
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaProducerService kafkaProducerService;
 
     @Captor
     private ArgumentCaptor<SalesStrategy> salesStrategyCaptor;
@@ -108,7 +107,7 @@ class SalesStrategyServiceTest {
         assertNotNull(responseDTO);
         assertEquals(1L, responseDTO.getId());
         assertEquals("Nova Estratégia", responseDTO.getTitulo());
-        verify(kafkaTemplate, times(1)).send("sales_strategy_topic", "Nova estratégia de vendas criada com ID: 1");
+        verify(kafkaProducerService, times(1)).sendMessage(eq("sales_strategy_topic"), any(SalesStrategyResponseDTO.class));
     }
 
     @Test
@@ -134,7 +133,7 @@ class SalesStrategyServiceTest {
         // Assert
         assertNotNull(responseDTO);
         assertEquals("Estratégia Atualizada", responseDTO.getTitulo());
-        verify(kafkaTemplate, times(1)).send("sales_strategy_topic", "Estratégia de vendas atualizada com ID: 1");
+        verify(kafkaProducerService, times(1)).sendMessage(eq("sales_strategy_topic"), any(SalesStrategyResponseDTO.class));
     }
 
     @Test
@@ -164,7 +163,7 @@ class SalesStrategyServiceTest {
 
         // Assert
         verify(salesStrategyRepository, times(1)).delete(existingStrategy);
-        verify(kafkaTemplate, times(1)).send("sales_strategy_topic", "Estratégia de vendas deletada com ID: 1");
+        verify(kafkaProducerService, times(1)).sendMessage(eq("sales_strategy_topic"), any(SalesStrategyResponseDTO.class));
     }
 
     @Test

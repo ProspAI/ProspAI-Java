@@ -24,7 +24,7 @@ class ClienteServiceTest {
     private ClienteRepository clienteRepository;
 
     @Mock
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaProducerService kafkaProducerService;
 
     @Captor
     private ArgumentCaptor<Cliente> clienteCaptor;
@@ -111,7 +111,7 @@ class ClienteServiceTest {
         assertNotNull(responseDTO);
         assertEquals(1L, responseDTO.getId());
         assertEquals("Pedro", responseDTO.getNome());
-        verify(kafkaTemplate, times(1)).send("clientes_topic", "Novo cliente criado com ID: 1");
+        verify(kafkaProducerService, times(1)).sendMessage(eq("clientes_topic"), any(ClienteResponseDTO.class));
     }
 
     @Test
@@ -139,7 +139,7 @@ class ClienteServiceTest {
         // Assert
         assertNotNull(responseDTO);
         assertEquals("Ana Maria", responseDTO.getNome());
-        verify(kafkaTemplate, times(1)).send("clientes_topic", "Cliente atualizado com ID: 1");
+        verify(kafkaProducerService, times(1)).sendMessage(eq("clientes_topic"), any(ClienteResponseDTO.class));
     }
 
     @Test
@@ -173,7 +173,7 @@ class ClienteServiceTest {
 
         // Assert
         verify(clienteRepository, times(1)).delete(existingCliente);
-        verify(kafkaTemplate, times(1)).send("clientes_topic", "Cliente deletado com ID: 1");
+        verify(kafkaProducerService, times(1)).sendMessage(eq("clientes_topic"), any(ClienteResponseDTO.class));
     }
 
     @Test

@@ -9,8 +9,6 @@ import br.com.fiap.prospai.repository.ClienteRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-import org.springframework.kafka.core.KafkaTemplate;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -30,7 +28,7 @@ class ReportServiceTest {
     private ClienteRepository clienteRepository;
 
     @Mock
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaProducerService kafkaProducerService;
 
     @Captor
     private ArgumentCaptor<Report> reportCaptor;
@@ -50,7 +48,7 @@ class ReportServiceTest {
         Report report = new Report();
         report.setId(1L);
         report.setTitulo("Relatório Mensal");
-        report.setCliente(cliente); // Inicializando o cliente
+        report.setCliente(cliente);
         report.setDataCriacao(LocalDateTime.now());
 
         when(reportRepository.findAll()).thenReturn(Collections.singletonList(report));
@@ -75,7 +73,7 @@ class ReportServiceTest {
         Report report = new Report();
         report.setId(1L);
         report.setTitulo("Relatório Anual");
-        report.setCliente(cliente); // Inicializando o cliente
+        report.setCliente(cliente);
         report.setDataCriacao(LocalDateTime.now());
 
         when(reportRepository.findById(1L)).thenReturn(Optional.of(report));
@@ -133,7 +131,7 @@ class ReportServiceTest {
         assertEquals(1L, responseDTO.getId());
         assertEquals("Relatório Semanal", responseDTO.getTitulo());
         assertEquals("Cliente Teste", responseDTO.getCliente().getNome());
-        verify(kafkaTemplate, times(1)).send("report_topic", "Novo relatório criado com ID: 1");
+        verify(kafkaProducerService, times(1)).sendMessage(eq("report_topic"), any(ReportResponseDTO.class));
     }
 
     @Test
@@ -178,7 +176,7 @@ class ReportServiceTest {
         assertNotNull(responseDTO);
         assertEquals("Relatório Atualizado", responseDTO.getTitulo());
         assertEquals("Cliente Teste", responseDTO.getCliente().getNome());
-        verify(kafkaTemplate, times(1)).send("report_topic", "Relatório atualizado com ID: 1");
+        verify(kafkaProducerService, times(1)).sendMessage(eq("report_topic"), any(ReportResponseDTO.class));
     }
 
     @Test
@@ -198,8 +196,13 @@ class ReportServiceTest {
     @Test
     void deleteReport_ShouldDeleteExistingReport() {
         // Arrange
+        Cliente cliente = new Cliente();
+        cliente.setId(1L);
+        cliente.setNome("Cliente Teste");
+
         Report existingReport = new Report();
         existingReport.setId(1L);
+        existingReport.setCliente(cliente);
 
         when(reportRepository.findById(1L)).thenReturn(Optional.of(existingReport));
 
@@ -208,7 +211,7 @@ class ReportServiceTest {
 
         // Assert
         verify(reportRepository, times(1)).delete(existingReport);
-        verify(kafkaTemplate, times(1)).send("report_topic", "Relatório deletado com ID: 1");
+        verify(kafkaProducerService, times(1)).sendMessage(eq("report_topic"), any(ReportResponseDTO.class));
     }
 
     @Test
