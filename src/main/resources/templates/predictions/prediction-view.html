@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Detalhes da Predição - ProspAI</title>
+    <title th:text="#{prediction.detalhes.titulo}">Detalhes da Predição - ProspAI</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
@@ -13,27 +13,27 @@
 
 <!-- Conteúdo principal -->
 <div class="content">
-    <h1>Detalhes da Predição</h1>
+    <h1 th:text="#{prediction.detalhes.heading}">Detalhes da Predição</h1>
     <dl class="details-list">
-        <dt>ID</dt>
+        <dt th:text="#{prediction.label.id}">ID</dt>
         <dd th:text="${prediction.id}"></dd>
 
-        <dt>Título</dt>
+        <dt th:text="#{prediction.label.titulo}">Título</dt>
         <dd th:text="${prediction.titulo}"></dd>
 
-        <dt>Descrição</dt>
+        <dt th:text="#{prediction.label.descricao}">Descrição</dt>
         <dd th:text="${prediction.descricao}"></dd>
 
-        <dt>Precisão</dt>
+        <dt th:text="#{prediction.label.precisao}">Precisão</dt>
         <dd th:text="${prediction.precisao} + '%'"></dd>
 
-        <dt>Cliente</dt>
+        <dt th:text="#{prediction.label.cliente}">Cliente</dt>
         <dd th:text="${prediction.cliente.nome}"></dd>
     </dl>
     <div class="button-group">
-        <a th:href="@{/predictions}" class="btn btn-outline-secondary">Voltar</a>
-        <a th:href="@{/predictions/editar/{id}(id=${prediction.id})}" class="btn btn-outline-primary">Editar</a>
-        <a th:href="@{/predictions/deletar/{id}(id=${prediction.id})}" onclick="return confirm('Tem certeza que deseja deletar esta predição?');" class="btn btn-outline-danger">Deletar</a>
+        <a th:href="@{/predictions}" class="btn btn-outline-secondary" th:text="#{botao.voltar}">Voltar</a>
+        <a th:href="@{/predictions/editar/{id}(id=${prediction.id})}" class="btn btn-outline-primary" th:text="#{botao.editar}">Editar</a>
+        <a th:href="@{/predictions/deletar/{id}(id=${prediction.id})}" onclick="return confirm('#{confirmacao.deletar.prediction}');" class="btn btn-outline-danger" th:text="#{botao.deletar}">Deletar</a>
     </div>
 </div>
 

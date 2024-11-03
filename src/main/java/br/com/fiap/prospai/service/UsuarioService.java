@@ -1,3 +1,4 @@
+// UsuarioService.java
 package br.com.fiap.prospai.service;
 
 import br.com.fiap.prospai.dto.request.UsuarioRequestDTO;
@@ -6,6 +7,7 @@ import br.com.fiap.prospai.entity.Usuario;
 import br.com.fiap.prospai.repository.UsuarioRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,10 +18,11 @@ import java.util.stream.Collectors;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // Método para buscar todos os usuários
@@ -39,7 +42,17 @@ public class UsuarioService {
     public UsuarioResponseDTO createUsuario(UsuarioRequestDTO usuarioRequestDTO) {
         Usuario usuario = new Usuario();
         BeanUtils.copyProperties(usuarioRequestDTO, usuario);
-        usuario.setSenha(usuarioRequestDTO.getSenha()); // Sem criptografar a senha
+
+        // Codifica a senha antes de salvar
+        String senhaCodificada = passwordEncoder.encode(usuarioRequestDTO.getSenha());
+        usuario.setSenha(senhaCodificada);
+
+        // Define o papel padrão se não for especificado
+        if (usuario.getPapel() == null || usuario.getPapel().isEmpty()) {
+            usuario.setPapel("ROLE_USER");
+        }
+
+        usuario.setAtivo(true); // Define como ativo por padrão
         Usuario novoUsuario = usuarioRepository.save(usuario);
         return toResponseDTO(novoUsuario);
     }
@@ -49,11 +62,15 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario não encontrado com id: " + id));
 
-        // Atualizando propriedades, exceto o ID e a senha
+        // Atualiza propriedades, exceto o ID e a senha
         BeanUtils.copyProperties(usuarioRequestDTO, usuario, "id", "senha");
+
         if (usuarioRequestDTO.getSenha() != null && !usuarioRequestDTO.getSenha().isEmpty()) {
-            usuario.setSenha(usuarioRequestDTO.getSenha());
+            // Codifica a nova senha
+            String senhaCodificada = passwordEncoder.encode(usuarioRequestDTO.getSenha());
+            usuario.setSenha(senhaCodificada);
         }
+
         Usuario usuarioAtualizado = usuarioRepository.save(usuario);
         return toResponseDTO(usuarioAtualizado);
     }

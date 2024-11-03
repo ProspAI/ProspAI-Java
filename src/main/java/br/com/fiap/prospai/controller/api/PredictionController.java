@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,11 +49,15 @@ public class PredictionController {
         Optional<PredictionResponseDTO> prediction = predictionService.getPredictionById(id);
         return prediction.map(this::toEntityModel)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(EntityModel.of(new PredictionResponseDTO())));
     }
 
     @Operation(summary = "Create a new prediction", description = "Creates a new prediction for a client.")
-    @ApiResponse(responseCode = "201", description = "Prediction created")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Prediction created"),
+            @ApiResponse(responseCode = "400", description = "Invalid data or client ID not found")
+    })
     @PostMapping("/cliente/{clienteId}")
     public ResponseEntity<EntityModel<PredictionResponseDTO>> createPrediction(
             @Parameter(description = "ID of the client for which the prediction is being created") @PathVariable Long clienteId,

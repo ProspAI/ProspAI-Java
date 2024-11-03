@@ -2,43 +2,43 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Detalhes do Usuário - ProspAI</title>
+    <title th:text="#{usuario.detalhes.titulo}">Detalhes do Usuário - ProspAI</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
 
 <!-- Inclui o fragmento do Header -->
-<div th:insert="fragments/header :: header"></div>
+<div th:insert="~{fragments/header :: header}"></div>
 
 <!-- Conteúdo principal -->
 <div class="content">
-    <h1>Detalhes do Usuário</h1>
+    <h1 th:text="#{usuario.detalhes.heading}">Detalhes do Usuário</h1>
     <dl class="details-list">
-        <dt>ID</dt>
+        <dt th:text="#{usuario.label.id}">ID</dt>
         <dd th:text="${usuario.id}"></dd>
 
-        <dt>Nome</dt>
+        <dt th:text="#{usuario.label.nome}">Nome</dt>
         <dd th:text="${usuario.nome}"></dd>
 
-        <dt>Email</dt>
+        <dt th:text="#{usuario.label.email}">Email</dt>
         <dd th:text="${usuario.email}"></dd>
 
-        <dt>Papel</dt>
+        <dt th:text="#{usuario.label.papel}">Papel</dt>
         <dd th:text="${usuario.papel}"></dd>
 
-        <dt>Ativo</dt>
-        <dd th:text="${usuario.ativo ? 'Sim' : 'Não'}"></dd>
+        <dt th:text="#{usuario.label.ativo}">Ativo</dt>
+        <dd th:text="${usuario.ativo ? #{usuario.label.sim} : #{usuario.label.nao}}"></dd>
     </dl>
     <div class="button-group">
-        <a th:href="@{/usuarios}" class="btn btn-outline-secondary">Voltar</a>
-        <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}" class="btn btn-outline-primary">Editar</a>
-        <a th:href="@{/usuarios/deletar/{id}(id=${usuario.id})}" onclick="return confirm('Tem certeza que deseja deletar este usuário?');" class="btn btn-outline-danger">Deletar</a>
+        <a th:href="@{/usuarios}" class="btn btn-outline-secondary" th:text="#{botao.voltar}">Voltar</a>
+        <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}" class="btn btn-outline-primary" th:text="#{botao.editar}">Editar</a>
+        <a th:href="@{/usuarios/deletar/{id}(id=${usuario.id})}" onclick="return confirm('#{confirmacao.deletar.usuario}');" class="btn btn-outline-danger" th:text="#{botao.deletar}">Deletar</a>
     </div>
 </div>
 
 <!-- Inclui o fragmento do Footer -->
-<div th:insert="fragments/footer :: footer"></div>
+<div th:insert="~{fragments/footer :: footer}"></div>
 
 </body>
 </html>

@@ -5,6 +5,8 @@ import br.com.fiap.prospai.dto.response.SalesStrategyResponseDTO;
 import br.com.fiap.prospai.entity.SalesStrategy;
 import br.com.fiap.prospai.repository.SalesStrategyRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,9 +17,12 @@ import java.util.stream.Collectors;
 public class SalesStrategyService {
 
     private final SalesStrategyRepository salesStrategyRepository;
+    private final KafkaTemplate<String, String> kafkaTemplate; // Injeção do KafkaTemplate
 
-    public SalesStrategyService(SalesStrategyRepository salesStrategyRepository) {
+    @Autowired
+    public SalesStrategyService(SalesStrategyRepository salesStrategyRepository, KafkaTemplate<String, String> kafkaTemplate) {
         this.salesStrategyRepository = salesStrategyRepository;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     public List<SalesStrategyResponseDTO> getAllSalesStrategies() {
@@ -36,6 +41,10 @@ public class SalesStrategyService {
         SalesStrategy salesStrategy = new SalesStrategy();
         BeanUtils.copyProperties(salesStrategyRequestDTO, salesStrategy);
         SalesStrategy novaSalesStrategy = salesStrategyRepository.save(salesStrategy);
+
+        // Enviar mensagem ao Kafka após a criação de uma nova estratégia de vendas
+        kafkaTemplate.send("sales_strategy_topic", "Nova estratégia de vendas criada com ID: " + novaSalesStrategy.getId());
+
         return toResponseDTO(novaSalesStrategy);
     }
 
@@ -45,6 +54,10 @@ public class SalesStrategyService {
 
         BeanUtils.copyProperties(salesStrategyRequestDTO, salesStrategy, "id");
         SalesStrategy salesStrategyAtualizada = salesStrategyRepository.save(salesStrategy);
+
+        // Enviar mensagem ao Kafka após a atualização de uma estratégia de vendas
+        kafkaTemplate.send("sales_strategy_topic", "Estratégia de vendas atualizada com ID: " + salesStrategyAtualizada.getId());
+
         return toResponseDTO(salesStrategyAtualizada);
     }
 
@@ -52,6 +65,9 @@ public class SalesStrategyService {
         SalesStrategy salesStrategy = salesStrategyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Sales Strategy não encontrada com id: " + id));
         salesStrategyRepository.delete(salesStrategy);
+
+        // Enviar mensagem ao Kafka após a exclusão de uma estratégia de vendas
+        kafkaTemplate.send("sales_strategy_topic", "Estratégia de vendas deletada com ID: " + id);
     }
 
     private SalesStrategyResponseDTO toResponseDTO(SalesStrategy salesStrategy) {

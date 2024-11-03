@@ -1,0 +1,120 @@
+/* Estilos Gerais para o Login */
+body {
+    font-family: 'Nunito Sans', sans-serif;
+    background-color: #e9eef3; /* Fundo suave para a tela de login */
+    color: #333; /* Cor do texto padrão */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    background-color: #ffffff; /* Cor de fundo do container */
+    padding: 40px; /* Espaçamento interno */
+    border-radius: 10px; /* Cantos arredondados */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    max-width: 400px; /* Largura máxima do formulário */
+    width: 100%; /* Ajuste da largura */
+    animation: fadeIn 0.6s ease-in-out; /* Animação de entrada */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h1 {
+    font-size: 28px; /* Tamanho da fonte */
+    font-weight: 700; /* Peso da fonte */
+    margin-bottom: 20px; /* Espaçamento abaixo */
+    text-align: center; /* Centralização do texto */
+    color: #2c3e50; /* Cor do texto */
+}
+
+.form-group {
+    margin-bottom: 20px; /* Espaçamento entre os grupos de entrada */
+}
+
+.form-group label {
+    display: block; /* Label em bloco */
+    margin-bottom: 8px; /* Espaçamento abaixo do label */
+    font-weight: 600; /* Peso da fonte */
+    color: #2c3e50; /* Cor do texto do label */
+}
+
+.form-control {
+    width: 100%; /* Largura total do campo */
+    padding: 10px; /* Espaçamento interno */
+    border: 1px solid #d1d1d6; /* Borda do campo */
+    border-radius: 5px; /* Cantos arredondados */
+    font-size: 16px; /* Tamanho da fonte */
+    color: #2c3e50; /* Cor do texto */
+    background-color: #f9fafc; /* Cor de fundo do campo */
+    transition: border-color 0.3s ease; /* Transição suave na borda */
+}
+
+.form-control:focus {
+    border-color: #007bff; /* Cor da borda ao focar */
+    outline: none; /* Remove o contorno padrão */
+}
+
+.error-message {
+    color: #e74c3c; /* Cor da mensagem de erro */
+    font-size: 14px; /* Tamanho da fonte */
+    margin-top: 5px; /* Espaçamento acima */
+}
+
+.btn-primary {
+    width: 100%; /* Botão ocupa a largura total */
+    background-color: #007bff; /* Cor de fundo do botão */
+    color: #ffffff; /* Cor do texto */
+    border: none; /* Sem borda */
+    padding: 12px; /* Espaçamento interno */
+    border-radius: 5px; /* Cantos arredondados */
+    font-weight: 600; /* Peso da fonte */
+    cursor: pointer; /* Cursor de ponteiro ao passar o mouse */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Transições suaves */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra leve */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Cor de fundo ao passar o mouse */
+    transform: translateY(-2px); /* Efeito de levantar ao passar o mouse */
+}
+
+.link-register {
+    display: block; /* Link em bloco */
+    margin-top: 20px; /* Espaçamento acima */
+    text-align: center; /* Centralização */
+    color: #007bff; /* Cor do link */
+    text-decoration: none; /* Remove sublinhado */
+    font-weight: 600; /* Peso da fonte */
+    transition: color 0.3s ease; /* Transição suave */
+}
+
+.link-register:hover {
+    color: #0056b3; /* Cor ao passar o mouse */
+}
+
+/* Media Queries para Responsividade */
+@media (max-width: 480px) {
+    .login-container {
+        padding: 30px; /* Reduz o espaçamento interno em telas pequenas */
+    }
+
+    h1 {
+        font-size: 24px; /* Reduz o tamanho da fonte em telas pequenas */
+    }
+
+    .btn-primary {
+        padding: 10px; /* Reduz o padding do botão em telas pequenas */
+    }
+}

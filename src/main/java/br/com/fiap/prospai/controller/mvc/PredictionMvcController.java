@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/predictions")
@@ -35,7 +34,7 @@ public class PredictionMvcController {
 
     @GetMapping("/{id}")
     public String visualizarPredicao(@PathVariable Long id, Model model) {
-        Optional<PredictionResponseDTO> predictionOpt = predictionService.getPredictionById(id);
+        var predictionOpt = predictionService.getPredictionById(id);
         if (predictionOpt.isPresent()) {
             model.addAttribute("prediction", predictionOpt.get());
             return "predictions/prediction-view";
@@ -47,7 +46,7 @@ public class PredictionMvcController {
     @GetMapping("/novo")
     public String novaPredicaoForm(Model model) {
         model.addAttribute("prediction", new PredictionRequestDTO());
-        List<ClienteResponseDTO> clientes = clienteService.getAllClientes(); // Certifique-se de que esta lista está sendo preenchida
+        List<ClienteResponseDTO> clientes = clienteService.getAllClientes();
         model.addAttribute("clientes", clientes);
         return "predictions/prediction-form";
     }
@@ -62,22 +61,20 @@ public class PredictionMvcController {
             return "predictions/prediction-form";
         }
 
-        predictionService.createPrediction(predictionRequestDTO, clienteId);
-        return "redirect:/predictions";
+        PredictionResponseDTO novaPrediction = predictionService.createPrediction(predictionRequestDTO, clienteId);
+        return "redirect:/predictions/" + novaPrediction.getId();
     }
 
     @GetMapping("/editar/{id}")
     public String editarPredicaoForm(@PathVariable Long id, Model model) {
-        Optional<PredictionResponseDTO> predictionOpt = predictionService.getPredictionById(id);
+        var predictionOpt = predictionService.getPredictionById(id);
         if (predictionOpt.isPresent()) {
             PredictionResponseDTO predictionResponse = predictionOpt.get();
-            // Converta PredictionResponseDTO para PredictionRequestDTO
             PredictionRequestDTO predictionRequest = new PredictionRequestDTO();
             predictionRequest.setId(predictionResponse.getId());
             predictionRequest.setTitulo(predictionResponse.getTitulo());
-            predictionRequest.setDescricao(predictionResponse.getDescricao());
             predictionRequest.setPrecisao(predictionResponse.getPrecisao());
-            predictionRequest.setClienteId(predictionResponse.getCliente().getId()); // Assumindo que PredictionResponseDTO tem um cliente com id
+            predictionRequest.setClienteId(predictionResponse.getCliente().getId());
 
             model.addAttribute("prediction", predictionRequest);
             List<ClienteResponseDTO> clientes = clienteService.getAllClientes();
@@ -91,7 +88,7 @@ public class PredictionMvcController {
     @PostMapping("/atualizar/{id}")
     public String atualizarPredicao(@PathVariable Long id, @ModelAttribute PredictionRequestDTO predictionRequestDTO) {
         predictionService.updatePrediction(id, predictionRequestDTO);
-        return "redirect:/predictions";
+        return "redirect:/predictions/" + id;
     }
 
     @GetMapping("/deletar/{id}")

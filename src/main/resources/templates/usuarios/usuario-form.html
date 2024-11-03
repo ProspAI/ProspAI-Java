@@ -2,65 +2,71 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${#strings.isEmpty(usuario.id) ? 'Novo Usuário - ProspAI' : 'Editar Usuário - ProspAI'}"></title>
+    <title th:with="tituloNovo=#{usuario.form.titulo.novo}, tituloEditar=#{usuario.form.titulo.editar}"
+           th:text="${#strings.isEmpty(usuario.id) ? tituloNovo : tituloEditar}">Formulário de Usuário</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
 
 <!-- Inclui o fragmento do Header -->
-<div th:insert="fragments/header :: header"></div>
+<div th:insert="~{fragments/header :: header}"></div>
 
 <!-- Conteúdo principal -->
-<div class="content">
-    <h1 th:text="${#strings.isEmpty(usuario.id) ? 'Novo Usuário' : 'Editar Usuário'}"></h1>
+<div class="content" th:with="headingNovo=#{usuario.form.heading.novo}, headingEditar=#{usuario.form.heading.editar}">
+    <h1 th:text="${#strings.isEmpty(usuario.id) ? headingNovo : headingEditar}">Formulário de Usuário</h1>
+
     <form th:action="@{/usuarios/salvar}" th:object="${usuario}" method="post" class="form">
         <input type="hidden" th:field="*{id}"/>
 
         <!-- Campo para Nome -->
         <div class="form-group">
-            <label for="nome">Nome</label>
+            <label for="nome" th:text="#{usuario.label.nome}">Nome</label>
             <input type="text" th:field="*{nome}" id="nome" class="form-control" required/>
             <div th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="error-message"></div>
         </div>
 
         <!-- Campo para Email -->
         <div class="form-group">
-            <label for="email">Email</label>
+            <label for="email" th:text="#{usuario.label.email}">Email</label>
             <input type="email" th:field="*{email}" id="email" class="form-control" required placeholder="exemplo@dominio.com"/>
             <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message"></div>
         </div>
 
         <!-- Campo para Senha -->
         <div class="form-group">
-            <label for="senha">Senha</label>
+            <label for="senha" th:text="#{usuario.label.senha}">Senha</label>
             <input type="password" th:field="*{senha}" id="senha" class="form-control" required/>
             <div th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}" class="error-message"></div>
         </div>
 
         <!-- Campo para Papel -->
         <div class="form-group">
-            <label for="papel">Papel</label>
-            <input type="text" th:field="*{papel}" id="papel" class="form-control" required/>
+            <label for="papel" th:text="#{usuario.label.papel}">Papel</label>
+            <select th:field="*{papel}" id="papel" class="form-control">
+                <option value="ROLE_USER" th:text="#{usuario.label.sim}">Usuário</option>
+                <!-- Apenas administradores podem ver a opção ROLE_ADMIN -->
+                <option value="ROLE_ADMIN" th:if="${isAdmin}" th:text="#{usuario.label.nao}">Administrador</option>
+            </select>
             <div th:if="${#fields.hasErrors('papel')}" th:errors="*{papel}" class="error-message"></div>
         </div>
 
         <!-- Campo para Ativo -->
         <div class="form-group">
-            <label for="ativo">Ativo</label>
+            <label for="ativo" th:text="#{usuario.label.ativo}">Ativo</label>
             <input type="checkbox" th:field="*{ativo}" id="ativo" class="form-check-input"/>
         </div>
 
         <!-- Botões de Ação -->
         <div class="button-group">
-            <button type="submit" class="btn btn-primary">Salvar</button>
-            <a th:href="@{/usuarios}" class="btn btn-outline-danger">Cancelar</a>
+            <button type="submit" class="btn btn-primary" th:text="#{botao.salvar}">Salvar</button>
+            <a th:href="@{/usuarios}" class="btn btn-outline-danger" th:text="#{botao.cancelar}">Cancelar</a>
         </div>
     </form>
 </div>
 
 <!-- Inclui o fragmento do Footer -->
-<div th:insert="fragments/footer :: footer"></div>
+<div th:insert="~{fragments/footer :: footer}"></div>
 
 </body>
 </html>

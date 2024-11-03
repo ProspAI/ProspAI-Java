@@ -2,7 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title th:text="${#strings.isEmpty(prediction.id) ? 'Nova Predição - ProspAI' : 'Editar Predição - ProspAI'}"></title>
+  <title th:with="tituloNovo=#{prediction.form.titulo.novo}, tituloEditar=#{prediction.form.titulo.editar}"
+         th:text="${#strings.isEmpty(prediction.id) ? tituloNovo : tituloEditar}">Formulário de Predição - ProspAI</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css">
 </head>
@@ -12,42 +13,39 @@
 <div th:insert="fragments/header :: header"></div>
 
 <!-- Conteúdo principal -->
-<div class="content">
-  <h1 th:text="${#strings.isEmpty(prediction.id) ? 'Nova Predição' : 'Editar Predição'}"></h1>
+<div class="content" th:with="headingNovo=#{prediction.form.heading.novo}, headingEditar=#{prediction.form.heading.editar}">
+  <h1 th:text="${#strings.isEmpty(prediction.id) ? headingNovo : headingEditar}">Formulário de Predição</h1>
+
   <form th:action="@{/predictions/salvar}" th:object="${prediction}" method="post" class="form">
     <input type="hidden" th:field="*{id}"/>
 
     <!-- Campo para Título -->
     <div class="form-group">
-      <label for="titulo">Título</label>
+      <label for="titulo" th:text="#{prediction.label.titulo}">Título</label>
       <input type="text" th:field="*{titulo}" id="titulo" class="form-control" required/>
       <div th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}" class="error-message"></div>
     </div>
 
-    <!-- Campo para Descrição -->
-    <div class="form-group">
-      <label for="descricao">Descrição</label>
-      <textarea th:field="*{descricao}" id="descricao" class="form-control" required></textarea>
-      <div th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}" class="error-message"></div>
-    </div>
+    <!-- Informar ao usuário sobre a geração automática -->
+    <p class="info-text">A descrição será gerada automaticamente usando inteligência artificial com base no título fornecido.</p>
 
     <!-- Campo para Precisão -->
     <div class="form-group">
-      <label for="precisao">Precisão (%)</label>
+      <label for="precisao" th:text="#{prediction.label.precisao}">Precisão (%)</label>
       <input type="number" th:field="*{precisao}" id="precisao" step="0.01" min="0" max="100" class="form-control" required/>
       <div th:if="${#fields.hasErrors('precisao')}" th:errors="*{precisao}" class="error-message"></div>
     </div>
 
     <!-- Campo para Cliente (Dropdown) -->
     <div class="form-group">
-      <label for="clienteId">Cliente</label>
+      <label for="clienteId" th:text="#{prediction.label.cliente}">Cliente</label>
       <div class="form-inline-group">
         <select th:field="*{clienteId}" id="clienteId" class="form-control" required>
-          <option value="" disabled selected>Selecione um cliente</option> <!-- Placeholder -->
+          <option value="" disabled selected th:text="#{prediction.select.cliente.placeholder}">Selecione um cliente</option>
           <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
         </select>
         <!-- Botão para criar um novo cliente -->
-        <a th:href="@{/clientes/novo}" class="btn btn-outline-secondary">Novo Cliente</a>
+        <a th:href="@{/clientes/novo}" class="btn btn-outline-secondary" th:text="#{botao.novoCliente}">Novo Cliente</a>
       </div>
       <div th:if="${error != null}" class="error-message" th:text="${error}"></div>
       <div th:if="${#fields.hasErrors('clienteId')}" th:errors="*{clienteId}" class="error-message"></div>
@@ -55,8 +53,8 @@
 
     <!-- Botões de Ação -->
     <div class="button-group">
-      <button type="submit" class="btn btn-primary">Salvar</button>
-      <a th:href="@{/predictions}" class="btn btn-outline-danger">Cancelar</a>
+      <button type="submit" class="btn btn-primary" th:text="#{botao.salvar}">Salvar</button>
+      <a th:href="@{/predictions}" class="btn btn-outline-danger" th:text="#{botao.cancelar}">Cancelar</a>
     </div>
   </form>
 </div>

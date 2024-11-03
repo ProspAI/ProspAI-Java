@@ -2,8 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Clientes - ProspAI</title>
-    <!-- Importando CSS externo -->
+    <title th:text="#{cliente.lista.titulo}">Lista de Clientes - ProspAI</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
@@ -15,15 +14,15 @@
 
 <!-- Conteúdo principal -->
 <div class="content">
-    <h1>Lista de Clientes</h1>
+    <h1 th:text="#{cliente.lista.heading}">Lista de Clientes</h1>
     <table>
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Telefone</th>
-            <th>Ações</th>
+            <th th:text="#{cliente.label.id}">ID</th>
+            <th th:text="#{cliente.label.nome}">Nome</th>
+            <th th:text="#{cliente.label.email}">Email</th>
+            <th th:text="#{cliente.label.telefone}">Telefone</th>
+            <th th:text="#{tabela.acoes}">Ações</th>
         </tr>
         </thead>
         <tbody>
@@ -33,20 +32,20 @@
             <td th:text="${cliente.email}"></td>
             <td th:text="${cliente.telefone}"></td>
             <td>
-                <a th:href="@{/clientes/{id}(id=${cliente.id})}" class="btn btn-outline-primary">Visualizar</a>
-                <a th:href="@{/clientes/editar/{id}(id=${cliente.id})}" class="btn btn-outline-secondary">Editar</a>
-                <a th:href="@{/clientes/deletar/{id}(id=${cliente.id})}" class="btn btn-outline-danger" onclick="return confirm('Tem certeza que deseja deletar este cliente?');">Deletar</a>
+                <a th:href="@{/clientes/{id}(id=${cliente.id})}" th:text="#{botao.visualizar}" class="btn btn-outline-primary">Visualizar</a>
+                <a th:href="@{/clientes/editar/{id}(id=${cliente.id})}" th:text="#{botao.editar}" class="btn btn-outline-secondary">Editar</a>
+                <a th:href="@{/clientes/deletar/{id}(id=${cliente.id})}" th:text="#{botao.deletar}" class="btn btn-outline-danger"
+                   onclick="return confirm('#{confirmacao.deletar.cliente}');">Deletar</a>
             </td>
         </tr>
         </tbody>
     </table>
-    <a href="/clientes/novo" class="btn btn-primary">Novo Cliente</a>
+    <a th:href="@{/clientes/novo}" class="btn btn-primary" th:text="#{botao.novoCliente}">Novo Cliente</a>
 </div>
 
 <!-- Inclui o fragmento do Footer -->
 <div th:insert="fragments/footer :: footer"></div>
 
-<!-- Importando JS externo -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
 <script src="/js/scripts.js"></script>
 </body>
