@@ -4,6 +4,8 @@
 
 **ProspAI** é uma aplicação de inteligência artificial desenvolvida para otimizar estratégias de vendas através da análise de dados de clientes. A aplicação oferece uma API RESTful robusta e uma interface MVC baseada em Spring Boot, que facilita a navegação e a utilização dos recursos disponíveis.
 
+segue o link do video explicativo: [Sprint3 - java advanced](https://www.youtube.com/watch?v=3Y9TP-nfKTk)
+---
 A aplicação já está hospedada na nuvem e pode ser acessada através do link base: [ProspAI na Azure](https://prospai.azurewebsites.net/clientes).
 
 ## Índice
@@ -44,7 +46,7 @@ A aplicação utiliza HATEOAS (Hypermedia as the Engine of Application State) pa
 
 ## Tecnologias Utilizadas
 
-- Java 17
+- Java 21
 - Spring Boot
 - Spring Data JPA com integração ao SQL Server
 - Thymeleaf para a camada de visualização (MVC)
@@ -161,6 +163,18 @@ A interface MVC oferece funcionalidades interativas para a gestão de todas as e
 ## Licença
 
 Este projeto é licenciado sob os termos da MIT License.
+
+---
+
+## Autores
+
+Este projeto foi desenvolvido por:
+
+- **AGATHA PIRES** – RM552247 – (2TDSPH)
+- **DAVID BRYAN VIANA** – RM551236 – (2TDSPM)
+- **GABRIEL LIMA** – RM99743 – (2TDSPM)
+- **GIOVANNA ALVAREZ** – RM98892 – (2TDSPM)
+- **MURILO MATOS** – RM552525 – (2TDSPM)
 
 ---
 
