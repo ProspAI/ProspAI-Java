@@ -18,7 +18,7 @@ ProspAI é uma aplicação de inteligência artificial desenvolvida para otimiza
 
 ## Visão Geral do Projeto
 
-ProspAI é uma plataforma que combina inteligência artificial e análise de dados para aprimorar a tomada de decisão em vendas. Através da integração com fontes de dados externas, como Reclame Aqui e Procon, a aplicação analisa feedbacks de clientes e oferece predições e relatórios detalhados para a otimização de estratégias de vendas.
+ProspAI é uma plataforma que combina inteligência artificial e análise de dados para aprimorar a tomada de decisão em vendas. Através da integração com fontes de dados externas, a aplicação analisa feedbacks de clientes e oferece predições e relatórios detalhados para a otimização de estratégias de vendas.
 
 ### Melhorias da Sprint 3 para a Sprint 4
 
