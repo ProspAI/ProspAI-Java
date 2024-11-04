@@ -134,9 +134,7 @@ A interface MVC oferece funcionalidades interativas para a gestão de todas as e
    A aplicação utiliza SQL Server. Atualize as configurações do banco de dados no arquivo `application.properties` conforme necessário, incluindo as seguintes variáveis:
    
    ```properties
-   DATASOURCE_URL=jdbc:sqlserver://sqlserver-prospai.database.windows.net:1433;database=prospai;user=admsql@sqlserver-prospai;password=
-
-devops@Fiap2tds;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+   DATASOURCE_URL=jdbc:sqlserver://sqlserver-prospai.database.windows.net:1433;database=prospai;user=admsql@sqlserver-prospai;password=devops@Fiap2tds;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
    AZURE_OPENAI_API_KEY=3H6XXLigpL6WVSoHycP4EdZixbE2BtXTB7h42GPfHFxWzltoUSmaJQQJ99AKACYeBjFXJ3w3AAABACOG6hL1
    AZURE_OPENAI_ENDPOINT=https://sprint4java552525.openai.azure.com/
    KAFKA_BOOTSTRAP_SERVERS=localhost:9092
