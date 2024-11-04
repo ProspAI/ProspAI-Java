@@ -9,5 +9,9 @@
             <a th:href="@{/sales-strategies}" class="nav-link">Estratégias de Vendas</a>
             <a th:href="@{/usuarios}" class="nav-link">Usuários</a>
         </nav>
+        <div class="user-info" th:if="${#authentication.name != 'anonymousUser'}">
+            <span th:text="${#authentication.name}">Nome do Usuário</span>
+            <a th:href="@{/logout}" class="logout-button">Logout</a>
+        </div>
     </div>
 </div>

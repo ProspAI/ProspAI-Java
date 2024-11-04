@@ -14,10 +14,12 @@ body {
 /* Header */
 .header {
     background-color: #1f2d3d;
-    padding: 20px 0;
-    text-align: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    position: fixed; /* Fixado no topo */
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
     width: 100%;
     top: 0;
     z-index: 1000;
@@ -26,26 +28,75 @@ body {
 
 .header nav {
     display: flex;
-    justify-content: center;
-    gap: 30px;
-    flex-wrap: wrap; /* Permite quebra de linha */
+    gap: 25px;
+    flex-wrap: wrap;
 }
 
 .header .nav-link {
     color: #ffffff;
     text-decoration: none;
     font-weight: 600;
-    padding: 10px 20px;
+    padding: 10px 15px;
     border-radius: 4px;
     transition: background-color 0.3s ease, transform 0.3s ease;
+    font-size: 0.95rem;
 }
 
 .header .nav-link:hover,
 .header .nav-link.active {
-    background-color: #2c3e50; /* Cor de fundo ao passar o mouse e item ativo */
+    background-color: #2c3e50;
     color: #ffffff;
-    transform: translateY(-2px); /* Efeito de hover */
-    font-weight: 700; /* Mais negrito para destaque */
+    transform: translateY(-2px);
+    font-weight: 700;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.user-info span {
+    font-size: 1rem;
+    color: #ecf0f1;
+}
+
+.logout-button {
+    display: inline-block;
+    color: #ffffff;
+    background-color: #e74c3c;
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: normal; /* Garante o alinhamento do texto */
+}
+
+.logout-button:hover {
+    background-color: #c0392b;
+    color: #ffffff;
+    box-shadow: 0 4px 8px rgba(231, 76, 60, 0.4);
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        padding: 15px;
+    }
+
+    .header nav {
+        margin-top: 10px;
+        justify-content: center;
+    }
+
+    .user-info {
+        margin-top: 10px;
+        justify-content: center; /* Centraliza o botão no layout móvel */
+    }
 }
 
 /* Content */

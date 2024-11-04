@@ -1,6 +1,14 @@
 <!-- /templates/fragments/footer.html -->
 <div th:fragment="footer">
     <footer>
-        Copyright © 2024 ProspAI Company. Todos os direitos reservados.
+        <div class="language-switch">
+            <a th:href="@{/?lang=pt}" title="Português">
+                <img src="https://flagcdn.com/16x12/br.png" alt="Português" class="flag-icon">
+            </a>
+            <a th:href="@{/?lang=en}" title="English">
+                <img src="https://flagcdn.com/16x12/gb.png" alt="English" class="flag-icon">
+            </a>
+        </div>
+        <p>Copyright © 2024 ProspAI Company. Todos os direitos reservados.</p>
     </footer>
 </div>
