@@ -2,6 +2,9 @@
 
 ProspAI é uma aplicação de inteligência artificial desenvolvida para otimizar estratégias de vendas através da análise de dados de clientes. A aplicação oferece uma API RESTful robusta e uma interface MVC baseada em Spring Boot, facilitando a navegação e a utilização dos recursos disponíveis.
 
+## Link do youtube:
+- link [https://www.youtube.com/watch?v=vbbYyHO95RQ](https://www.youtube.com/watch?v=vbbYyHO95RQ)
+
 ## Índice
 
 1. [Visão Geral do Projeto](#visão-geral-do-projeto)
